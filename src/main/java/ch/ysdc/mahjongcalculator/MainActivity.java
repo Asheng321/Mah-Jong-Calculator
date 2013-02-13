@@ -297,7 +297,7 @@ public class MainActivity extends SherlockActivity implements
 		if(isPlayerHandSelected){
 			hiddenTiles.put((String) tileTag, ++hiddenTileCount);
 		}else{
-			openTiles.put((String) tileTag, ++hiddenTileCount);
+			openTiles.put((String) tileTag, ++openTileCount);
 		}
 		tileCounter++;
 		
@@ -337,7 +337,8 @@ public class MainActivity extends SherlockActivity implements
 		if (tileSelected >= 0) {
 			ImageButton btn = (ImageButton) findViewById(tileSelected);
 			Log.d(TAG, "button found: " + btn);
-			if(isPlayerHandSelected()){
+			
+			if(R.id.main_player_hidden_tiles == ((View)btn.getParent()).getId()){
 				Integer tileQuantity = hiddenTiles.get(btn.getTag());
 				hiddenTiles.put((String) btn.getTag(), --tileQuantity);
 				
@@ -398,7 +399,10 @@ public class MainActivity extends SherlockActivity implements
 
 	private boolean isPlayerHandSelected(){
 		RadioGroup g = (RadioGroup) findViewById(R.id.main_add_type);
-		return (g.getCheckedRadioButtonId() == R.id.main_player_hidden_tiles);
+		Log.d(TAG, "button group check btn: " + g.getCheckedRadioButtonId());
+		Log.d(TAG, "hidden hand tiles " + R.id.main_add_hidden);
+		Log.d(TAG, "open hand tiles " + R.id.main_add_open);
+		return (g.getCheckedRadioButtonId() == R.id.main_add_hidden);
 	}
 	
 	

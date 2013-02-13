@@ -8,11 +8,24 @@
 	<packaging>apk</packaging>
 	<name>Mahjong Calculator</name>
 
-	<properties>
-		<platform.version>4.1.1.4</platform.version>
-		<platform.path>/Users/djohannot/Libraries/android-sdk</platform.path>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<profiles>
+	    <profile>
+	        <id>djt-home</id>
+	        <properties>
+				<platform.version>4.1.1.4</platform.version>
+				<platform.path>C:\libs\android\sdk</platform.path>
+				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	        </properties>
+	    </profile>
+	    <profile>
+	        <id>djt-work</id>
+	        <properties>
+				<platform.version>4.1.1.4</platform.version>
+				<platform.path>/Users/djohannot/Libraries/android-sdk</platform.path>
+				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	        </properties>
+	    </profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
