@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Start emulator</actionName>
+            <displayName>Start emulator</displayName>
+            <goals>
+                <goal>android:emulator-start</goal>
+            </goals>
+            <properties>
+                <emulator>GS3</emulator>
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-Deploy-Emulator</actionName>
+            <displayName>Deploy-Emulator</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>android:deploy</goal>
+            </goals>
+            <properties>
+                <emulator>GS3</emulator>
+                <android.device>emulator</android.device>
+                
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-Deploy-Device</actionName>
+            <displayName>Deploy-Device</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>android:deploy</goal>
+            </goals>
+            <properties>
+                <emulator>usb</emulator>
+                <android.device>usb</android.device>
+                
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-Re-deploy-Emulator</actionName>
+            <displayName>Re-deploy-Emulator</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>android:redeploy</goal>
+            </goals>
+            <properties>
+                <emulator>GS3</emulator>
+                <android.device>emulator</android.device>
+                
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-Re-deploy-Device</actionName>
+            <displayName>Re-deploy-Device</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>android:redeploy</goal>
+            </goals>
+            <properties>
+                <emulator>usb</emulator>
+                <android.device>usb</android.device>
+                
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-Run App</actionName>
+            <displayName>Run App</displayName>
+            <goals>
+                <goal>android:run</goal>
+            </goals>
+        </action>
+    </actions>
