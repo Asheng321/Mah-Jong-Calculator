@@ -103,15 +103,53 @@ public class Tile {
         this.hands = hands;
     }
 
-    public enum Category {
+    @Override
+    public String toString() {
+        return "Tile (" + id + ") " + no + category + " " + (isVisible ? "Hidden" : "Hand");
+    }
+    
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + no;
+		return result;
+	}
 
-        BAMBOO,
-        CHARACTER,
-        CIRCLE,
-        WIND,
-        DRAGON,
-        FLOWER,
-        SEASON
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tile other = (Tile) obj;
+		if (no != other.no)
+			return false;
+		return true;
+	}
+
+	public enum Category {
+
+        BAMBOO("B"),
+        CHARACTER("K"),
+        CIRCLE("C"),
+        WIND("W"),
+        DRAGON("D"),
+        FLOWER("F"),
+        SEASON("S");
+        
+        private String value;
+        
+        Category(String v){
+        	value = v;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
     };
     
     
