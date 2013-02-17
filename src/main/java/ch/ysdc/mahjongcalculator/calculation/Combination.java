@@ -7,10 +7,13 @@ import ch.ysdc.mahjongcalculator.model.Tile;
 
 public class Combination {
 	private LinkedList<Tile> tiles;
-
-	Combination(Tile tile){
+	
+	public Combination(){
 		tiles = new LinkedList<Tile>();
-		tiles.add(tile);
+	}
+	public Combination(Tile tile){
+		tiles = new LinkedList<Tile>();
+		tiles.addFirst(tile);
 	}
 	public LinkedList<Tile> getTiles() {
 		return tiles;
@@ -21,11 +24,19 @@ public class Combination {
 	}
 	
 	public void addTile(Tile tile){
-		tiles.add(tile);
+		tiles.addLast(tile);
 	}
 	
 	public void addTiles(Tile[] tileArray){
 		tiles.addAll(Arrays.asList(tileArray));
+	}
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("Combination(");
+		for(Tile tile : tiles){
+			sb.append(tile.getNo() + "" + tile.getCategory() + ",");
+		}
+		return sb.substring(0, sb.length()-1) + ")";
 	}
 
 }

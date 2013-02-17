@@ -3,14 +3,13 @@ package ch.ysdc.mahjongcalculator.calculation;
 import java.util.LinkedList;
 import java.util.List;
 
-import ch.ysdc.mahjongcalculator.model.HandTile;
 import ch.ysdc.mahjongcalculator.model.Tile;
 
 public class Possibility {
 	private static int counter = 0;
 	private int id;
 	private boolean isValid;
-	private LinkedList<HandTile> unusedTiles;
+	private LinkedList<Tile> unusedTiles;
 	private LinkedList<Combination> combinations;
 	private Tile[] pair;
 	
@@ -26,12 +25,12 @@ public class Possibility {
 		pair = p.pair;
 	}
 	
-	Possibility(List<HandTile> t, List<Combination> c){
+	Possibility(List<Tile> t, List<Combination> c){
 		id = counter++;
 		isValid = true;
 		
-		pair = new Tile[2];
-		unusedTiles = (t != null ? new LinkedList<HandTile>(t) : new LinkedList<HandTile>());
+		pair = null;
+		unusedTiles = (t != null ? new LinkedList<Tile>(t) : new LinkedList<Tile>());
 		combinations = (c != null ? new LinkedList<Combination>(c) : new LinkedList<Combination>());
 	}
 
@@ -52,13 +51,12 @@ public class Possibility {
 		combinations.addAll(c);
 	}
 	
-	public void addTile(HandTile t){
+	public void addTile(Tile t){
 		unusedTiles.add(t);
 	}
 	
 	public void setPair(Tile t1, Tile t2){
-		pair[0] = t1;
-		pair[1] = t2;
+		pair = new Tile[]{t1,t2};
 	}
 	/*****************************************
 	GETTER AND SETTER 
@@ -72,11 +70,11 @@ public class Possibility {
 		this.isValid = isValid;
 	}
 	
-	public LinkedList<HandTile> getUnusedTiles() {
+	public LinkedList<Tile> getUnusedTiles() {
 		return unusedTiles;
 	}
 
-	public void setUnusedTiles(LinkedList<HandTile> unusedTiles) {
+	public void setUnusedTiles(LinkedList<Tile> unusedTiles) {
 		this.unusedTiles = unusedTiles;
 	}
 
@@ -96,6 +94,10 @@ public class Possibility {
 		this.id = id;
 	}
 	
+	public Tile[] getPair() {
+		return pair;
+	}
+
 	@Override
 	public String toString(){
 		return this.getId() + " (" + this.getUnusedTiles().size() + ", " + this.getCombinations().size() + ")";

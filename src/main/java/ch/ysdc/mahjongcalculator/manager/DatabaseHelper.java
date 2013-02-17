@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.ysdc.mahjongcalculator.db;
+package ch.ysdc.mahjongcalculator.manager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import ch.ysdc.mahjongcalculator.model.Game;
 import ch.ysdc.mahjongcalculator.model.Hand;
-import ch.ysdc.mahjongcalculator.model.HandTile;
 import ch.ysdc.mahjongcalculator.model.Tile;
 import ch.ysdc.mahjongcalculator.utils.Constants;
 
@@ -34,6 +34,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	// the DAO object we use to access the SimpleData table
 	private Dao<Hand, Integer> handDao = null;
 	private Dao<Tile, Integer> tileDao = null;
+	private Dao<Game, Integer> gameDao = null;
 
 	public DatabaseHelper(Context c) {
 		super(c, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,7 +47,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		try {
 			TableUtils.createTable(connectionSource, Hand.class);
 			TableUtils.createTable(connectionSource, Tile.class);
-			TableUtils.createTable(connectionSource, HandTile.class);
+			TableUtils.createTable(connectionSource, Game.class);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -66,12 +67,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 				try {
 					TableUtils.dropTable(connectionSource, Hand.class, false);
 					TableUtils.dropTable(connectionSource, Tile.class, false);
-					TableUtils.dropTable(connectionSource, HandTile.class, false);
+					TableUtils.dropTable(connectionSource, Game.class, false);
 					TableUtils.createTable(connectionSource, Hand.class);
 					TableUtils.createTable(connectionSource, Tile.class);
-					TableUtils.createTable(connectionSource, HandTile.class);
+					TableUtils.createTable(connectionSource, Game.class);
 					
-					//update the first run pref
+					//update the first run preference
 					SharedPreferences mPrefs = context.getSharedPreferences(Constants.appPref, 0); //0 = mode 
 				    SharedPreferences.Editor edit = mPrefs.edit();
 				    edit.putBoolean(Constants.firstRun, false);
@@ -119,5 +120,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			}
 		}
 		return tileDao;
+	}
+
+	public Dao<Game, Integer> getGameDao() {
+		if (null == gameDao) {
+			try {
+				gameDao = getDao(Game.class);
+			} catch (java.sql.SQLException e) {
+				Log.e(this.getClass().getName(),
+						"SQLException during getGameDao", e);
+			}
+		}
+		return gameDao;
 	}
 }

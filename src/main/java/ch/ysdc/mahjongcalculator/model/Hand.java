@@ -4,12 +4,13 @@
  */
 package ch.ysdc.mahjongcalculator.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -20,15 +21,18 @@ public class Hand {
 
     public static final String ID_FIELD_NAME = "id";
     public static final String NAME_FIELD_NAME = "name";
-    public static final String HAND_TILE_FIELD_NAME = "tiles";
+    public static final String TILES_FIELD_NAME = "tiles";
+    public static final String GAME_FIELD_NAME = "game";
     
     @DatabaseField(generatedId = true, columnName = ID_FIELD_NAME)
     private int id;
     @DatabaseField(columnName = NAME_FIELD_NAME)
     private String name;
-    @ForeignCollectionField(columnName = ID_FIELD_NAME)
-    private ForeignCollection<HandTile> tiles;
-
+    @ForeignCollectionField(columnName = TILES_FIELD_NAME)
+    private ForeignCollection<Tile> tiles;
+    @DatabaseField(foreign = true, columnName = GAME_FIELD_NAME)
+    private Game game;
+    
     public Hand(){
     	super();
     }
@@ -53,20 +57,19 @@ public class Hand {
 		this.name = name;
 	}
 
-	public List<HandTile> getTiles() {
-        ArrayList<HandTile> itemList = new ArrayList<HandTile>();
-        for (HandTile item : tiles) {
+	public List<Tile> getTiles() {
+        ArrayList<Tile> itemList = new ArrayList<Tile>();
+        for (Tile item : tiles) {
             itemList.add(item);
         }
         return itemList;
     }
 
-    public void setTiles(ForeignCollection<HandTile> tiles) {
+    public void setTiles(ForeignCollection<Tile> tiles) {
         this.tiles = tiles;
     }
     
-    public void addTile(Tile tile){
-    	HandTile ht = new HandTile(this,tile);
-    	getTiles().add(ht);
+    public void addTile(Tile handtile){
+		this.tiles.add(handtile);
     }
 }

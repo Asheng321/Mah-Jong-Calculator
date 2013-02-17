@@ -4,15 +4,12 @@
  */
 package ch.ysdc.mahjongcalculator.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Pattern;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-/**
+/*
  *
  * @author djohannot
  */
@@ -23,8 +20,9 @@ public class Tile {
     public static final String NO_FIELD_NAME = "no";
     public static final String IMG_FIELD_NAME = "img";
     public static final String CATEGORY_FIELD_NAME = "category";
-    public static final String HAND_TILE_FIELD_NAME = "hands";
+    public static final String HAND_FIELD_NAME = "hand";
     public static final String ISVISIBLE_TILE_FIELD_NAME = "isVisible";
+    public static final String GAME_FIELD_NAME = "game";
     
     @DatabaseField(generatedId = true,columnName = ID_FIELD_NAME)
     private int id;
@@ -36,10 +34,12 @@ public class Tile {
     private Boolean isVisible;
     @DatabaseField(columnName = CATEGORY_FIELD_NAME)
     private Category category;
-    
-    @ForeignCollectionField(columnName = ID_FIELD_NAME)
-    private ForeignCollection<HandTile> hands;
 
+    @DatabaseField(foreign = true, columnName = HAND_FIELD_NAME)
+    private Hand hand;
+    @DatabaseField(foreign = true, columnName = GAME_FIELD_NAME)
+    private Game game;
+    
     public Tile(){
         super();
     }
@@ -47,6 +47,17 @@ public class Tile {
     public Tile(int n, String i, Category c){
     	super();
         this.no = n;
+        this.img = i;
+        this.category = c;
+        this.isVisible = false;
+    }
+    public Tile(String n, String i, Category c){
+    	super();
+    	if (Pattern.matches("[0-9]{1}",n)) {
+    		this.no = Integer.valueOf(n);
+    	}else{
+    		this.no = 0;
+    	}
         this.img = i;
         this.category = c;
         this.isVisible = false;
@@ -91,21 +102,26 @@ public class Tile {
         this.category = category;
     }
 
-	public List<HandTile> getHands() {
-        ArrayList<HandTile> itemList = new ArrayList<HandTile>();
-        for (HandTile hand : hands) {
-            itemList.add(hand);
-        }
-        return itemList;
-    }
 
-    public void setHands(ForeignCollection<HandTile> hands) {
-        this.hands = hands;
-    }
+    public Hand getHand() {
+		return hand;
+	}
 
-    @Override
+	public void setHand(Hand hand) {
+		this.hand = hand;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	@Override
     public String toString() {
-        return "Tile (" + id + ") " + no + category + " " + (isVisible ? "Hidden" : "Hand");
+        return "Tile (" + id + ") " + no + category + " " + (isVisible ? "Hidden" : "Hand" + " #" + (hand!=null?"handy":"-"));
     }
     
     @Override
@@ -132,13 +148,13 @@ public class Tile {
 
 	public enum Category {
 
-        BAMBOO("B"),
-        CHARACTER("K"),
-        CIRCLE("C"),
-        WIND("W"),
-        DRAGON("D"),
-        FLOWER("F"),
-        SEASON("S");
+        BAMBOO("b"),
+        CHARACTER("k"),
+        CIRCLE("c"),
+        WIND("w"),
+        DRAGON("d"),
+        FLOWER("f"),
+        SEASON("s");
         
         private String value;
         
@@ -150,8 +166,17 @@ public class Tile {
         public String toString() {
             return value;
         }
-    };
-    
-    
+        
 
+        public static Category fromValue(String v) {
+          if (v != null) {
+            for (Category c : Category.values()) {
+              if (v.equalsIgnoreCase(c.value)) {
+                return c;
+              }
+            }
+          }
+          throw new IllegalArgumentException("No constant with value " + v + " found");
+        }
+	}
 }

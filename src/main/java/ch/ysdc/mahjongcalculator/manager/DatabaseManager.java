@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.ysdc.mahjongcalculator.db;
+package ch.ysdc.mahjongcalculator.manager;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,10 +10,8 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 import ch.ysdc.mahjongcalculator.model.Hand;
+import ch.ysdc.mahjongcalculator.model.Game;
 import ch.ysdc.mahjongcalculator.model.Tile;
-
-import com.j256.ormlite.stmt.QueryBuilder;
-
 /**
  *
  * @author djohannot
@@ -44,10 +42,11 @@ public class DatabaseManager {
     /***********************************************************
     TILES METHODS
     ***********************************************************/
-    public List<Tile> getAllTiles() {
+    public List<Tile> getGameTiles(Game currentGame) {
         List<Tile> tilesList = null;
         try {
-            tilesList = getHelper().getTileDao().queryForAll();
+            //tilesList = getHelper().getTileDao().queryForAll();
+        	tilesList = getHelper().getTileDao().queryForEq(Tile.GAME_FIELD_NAME, currentGame);
         } catch (SQLException e) {
             Log.e(this.getClass().getName(), "SQLException during getAllTiles", e);
         }
@@ -81,12 +80,13 @@ public class DatabaseManager {
         }
     }
 
-    public void updateTile(Tile wishList) {
+    public int updateTile(Tile wishList) {
         try {
-            getHelper().getTileDao().update(wishList);
+            return getHelper().getTileDao().update(wishList);
         } catch (SQLException e) {
             Log.e(this.getClass().getName(), "SQLException during updateTile", e);
         }
+        return 0;
     }
 
 
@@ -98,8 +98,60 @@ public class DatabaseManager {
             getHelper().getHandDao().create(h);
             return h;
         } catch (SQLException e) {
-            Log.e(this.getClass().getName(), "SQLException during addTile", e);
+            Log.e(this.getClass().getName(), "SQLException during createHand", e);
         }
         return null;
+    }
+    public int updateHand(Hand h) {
+        try {
+            return getHelper().getHandDao().update(h);
+        } catch (SQLException e) {
+            Log.e(this.getClass().getName(), "SQLException during updateHand", e);
+        }
+        return 0;
+    }
+    
+
+
+    /***********************************************************
+    GAME METHODS
+    ***********************************************************/
+
+    public List<Game> getCurrentGame(){
+        try {
+        	return getHelper().getGameDao().query(getHelper().getGameDao().queryBuilder().where().eq(Game.IS_CURRENT_FIELD_NAME, Boolean.valueOf(true)).prepare());
+        } catch (SQLException e) {
+            Log.e(this.getClass().getName(), "SQLException during create game", e);
+        }
+        return null;
+    }
+    
+    public Game createGame(Game h) {
+        try {
+            getHelper().getGameDao().create(h);
+            return h;
+        } catch (SQLException e) {
+            Log.e(this.getClass().getName(), "SQLException during create game", e);
+        }
+        return null;
+    }
+    
+    public int updateGame(Game h) {
+        try {
+            return getHelper().getGameDao().update(h);
+            
+        } catch (SQLException e) {
+            Log.e(this.getClass().getName(), "SQLException during update Game", e);
+        }
+        return 0;
+    }
+    
+    public int deleteGame(Game h) {
+        try {
+            return getHelper().getGameDao().update(h);
+        } catch (SQLException e) {
+            Log.e(this.getClass().getName(), "SQLException during delete Game", e);
+        }
+        return 0;
     }
 }

@@ -483,8 +483,8 @@
                 android:contentDescription="@string/tile.honor.ew"
                 android:onClick="tileSelected"
                 android:padding="6dp"
-                android:src="@drawable/tile_ve"
-                android:tag="tile_ve" />
+                android:src="@drawable/tile_1w"
+                android:tag="tile_1w" />
 
             <ImageButton
                 android:id="@+id/main.tile.honor.sw"
@@ -494,8 +494,8 @@
                 android:contentDescription="@string/tile.honor.sw"
                 android:onClick="tileSelected"
                 android:padding="6dp"
-                android:src="@drawable/tile_vs"
-                android:tag="tile_vs" />
+                android:src="@drawable/tile_2w"
+                android:tag="tile_2w" />
 
             <ImageButton
                 android:id="@+id/main.tile.honor.ww"
@@ -505,8 +505,8 @@
                 android:contentDescription="@string/tile.honor.ww"
                 android:onClick="tileSelected"
                 android:padding="6dp"
-                android:src="@drawable/tile_vw"
-                android:tag="tile_vw" />
+                android:src="@drawable/tile_3w"
+                android:tag="tile_3w" />
 
             <ImageButton
                 android:id="@+id/main.tile.honor.nw"
@@ -516,8 +516,8 @@
                 android:contentDescription="@string/tile.honor.nw"
                 android:onClick="tileSelected"
                 android:padding="6dp"
-                android:src="@drawable/tile_vn"
-                android:tag="tile_vn" />
+                android:src="@drawable/tile_4w"
+                android:tag="tile_4w" />
 
             <ImageButton
                 android:id="@+id/main.tile.honor.rd"
@@ -527,8 +527,8 @@
                 android:contentDescription="@string/tile.honor.rd"
                 android:onClick="tileSelected"
                 android:padding="6dp"
-                android:src="@drawable/tile_dr"
-                android:tag="tile_dr" />
+                android:src="@drawable/tile_2d"
+                android:tag="tile_2d" />
 
             <ImageButton
                 android:id="@+id/main.tile.honor.gd"
@@ -538,8 +538,8 @@
                 android:contentDescription="@string/tile.honor.gd"
                 android:onClick="tileSelected"
                 android:padding="6dp"
-                android:src="@drawable/tile_dg"
-                android:tag="tile_dg" />
+                android:src="@drawable/tile_3d"
+                android:tag="tile_3d" />
 
             <ImageButton
                 android:id="@+id/main.tile.honor.wd"
@@ -549,8 +549,8 @@
                 android:contentDescription="@string/tile.honor.wd"
                 android:onClick="tileSelected"
                 android:padding="6dp"
-                android:src="@drawable/tile_dw"
-                android:tag="tile_dw" />
+                android:src="@drawable/tile_1d"
+                android:tag="tile_1d" />
         </LinearLayout>
     </HorizontalScrollView>
 </LinearLayout>

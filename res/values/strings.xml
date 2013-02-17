@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <plurals name="playerTileQuantity">
         <item quantity="one">Player Tile (%d)</item>
         <item quantity="other">Player Tiles (%d)</item>
     </plurals>
-    
+
     <string name="app_name">Mah-Jong Calculator</string>
-    
     <string name="player.tile">Tile of the player</string>
     <string name="tile.bamboo.1">1 bamboo</string>
     <string name="tile.bamboo.2">2 bamboo</string>
@@ -18,7 +17,6 @@
     <string name="tile.bamboo.7">7 bamboo</string>
     <string name="tile.bamboo.8">8 bamboo</string>
     <string name="tile.bamboo.9">9 bamboo</string>
-    
     <string name="tile.circle.1">1 circle</string>
     <string name="tile.circle.2">2 circle</string>
     <string name="tile.circle.3">3 circle</string>
@@ -28,7 +26,6 @@
     <string name="tile.circle.7">7 circle</string>
     <string name="tile.circle.8">8 circle</string>
     <string name="tile.circle.9">9 circle</string>
-    
     <string name="tile.character.1">1 character</string>
     <string name="tile.character.2">2 character</string>
     <string name="tile.character.3">3 character</string>
@@ -38,33 +35,31 @@
     <string name="tile.character.7">7 character</string>
     <string name="tile.character.8">8 character</string>
     <string name="tile.character.9">9 character</string>
-    
     <string name="tile.honor.ew">East Wind</string>
     <string name="tile.honor.sw">South Wind</string>
     <string name="tile.honor.ww">West Wind</string>
     <string name="tile.honor.nw">North Wind</string>
     <string name="tile.honor.rd">Red Dragon</string>
     <string name="tile.honor.gd">Green Dragon</string>
-    <string name="tile.honor.wd">White Dragon</string>  
-   
+    <string name="tile.honor.wd">White Dragon</string>
     <string name="main.title">Tiles Selection</string>
     <string name="main.playertiles"></string>
     <string name="main.player.tile.empty">Select the tiles to add</string>
-    
     <string name="main.tiles.available">Available Tiles</string>
     <string name="main.tiles.bamboos">Bamboos</string>
     <string name="main.tiles.characters">Characters</string>
     <string name="main.tiles.circles">Circles</string>
     <string name="main.tiles.honors">Honors</string>
-    <string name="main.welcome.title">Welcome</string>
-    <string name="main.welcome.message">&quot;Initialization of the application…&quot;</string>
-    <string name="main.init.finish">&quot;Application ready, have fun!&quot;</string>
-    
+    <string name="main.add.hidden">Hidden Tile</string>
+    <string name="main.add.open">Open Tile</string>
+    <string name="main.next.title">&quot;Please wait&#8230;&quot;</string>
+    <string name="main.next.tiles">&quot;Charging tiles&#8230;&quot;</string>
+    <string name="main.next.possibilities">&quot;Calculating possibilities&#8230;&quot;</string>
     <string name="settings.title">Settings</string>
-    
+    <string name="possibilities.title">Select a possibility</string>
+    <string name="game.title">Game Parameters</string>
     <string name="action.go">"Let's go!"</string>
     <string name="action.delete">Delete</string>
-    
     <string name="option.back">Back</string>
     <string name="option.next">Next</string>
     <string name="option.settings">Settings</string>
@@ -72,9 +67,6 @@
     <string name="option.save">Save</string>
     <string name="option.about">About</string>
     <string name="option.exit">Exit</string>
-    <string name="main.add.hidden">Hidden Tile</string>
-    <string name="main.add.open">Open Tile</string>
-    <string name="test">test</string>
-    
-    
+    <string name="error.invalid.tiles">Unable to find a valid mahjong. Please check your tiles</string>
+
 </resources>
