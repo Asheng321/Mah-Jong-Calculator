@@ -1,5 +1,6 @@
 package ch.ysdc.mahjongcalculator.calculation;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -38,6 +39,15 @@ public class Possibility implements Parcelable {
 		pair = null;
 		unusedTiles = (t != null ? new CopyOnWriteArrayList<Tile>(t) : new CopyOnWriteArrayList<Tile>());
 		combinations = (c != null ? new CopyOnWriteArrayList<Combination>(c) : new CopyOnWriteArrayList<Combination>());
+	}
+
+	public Possibility(Parcel in) {
+		id = in.readInt();
+		isValid = Boolean.valueOf(in.readString());
+		pair = new Tile[2];
+		pair[0] = in.readParcelable(Tile.class.getClassLoader());
+		pair[1] = in.readParcelable(Tile.class.getClassLoader());
+		combinations = Arrays.asList((Combination[])in.readParcelableArray(Combination.class.getClassLoader()));
 	}
 
 	/*****************************************
@@ -179,8 +189,7 @@ public class Possibility implements Parcelable {
 	public void writeToParcel(Parcel out, int flag) {
 		// TODO Auto-generated method stub
 		out.writeInt(id);
-		out.writeValue(isValid);
-		out.writeArray(pair);
+		out.writeString(String.valueOf(isValid));
 		out.writeParcelable(pair[0], flag);
 		out.writeParcelable(pair[1], flag);
 		out.writeParcelableArray(combinations.toArray(new Combination[combinations.size()]), flag);

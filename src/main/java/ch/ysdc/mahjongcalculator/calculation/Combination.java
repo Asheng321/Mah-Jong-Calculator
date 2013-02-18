@@ -1,26 +1,30 @@
 package ch.ysdc.mahjongcalculator.calculation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import ch.ysdc.mahjongcalculator.model.Tile;
 
-public class Combination {
+public class Combination implements Parcelable{
 	private Type type;
 	private String representation;
-	private LinkedList<Tile> tiles;
+	private List<Tile> tiles;
 	
 	public Combination(){
 		tiles = new LinkedList<Tile>();
 	}
-	public Combination(Tile tile){
-		tiles = new LinkedList<Tile>();
-		tiles.addFirst(tile);
+	public Combination(Parcel in) {
+		// TODO Auto-generated constructor stub
+		//Combination.class.getClassLoader()
+		type = in.readParcelable(Type.class.getClassLoader());
+		representation = in.readString();
+		tiles = Arrays.asList((Tile[])in.readParcelableArray(Tile.class.getClassLoader()));
 	}
-	public LinkedList<Tile> getTiles() {
+	public List<Tile> getTiles() {
 		return tiles;
 	}
 
@@ -29,7 +33,7 @@ public class Combination {
 	}
 	
 	public void addTile(Tile tile){
-		tiles.addLast(tile);
+		tiles.add(tile);
 	}
 	
 	public void addTiles(Tile[] tileArray){
@@ -76,10 +80,56 @@ public class Combination {
 		}
 	}
 	
-	public enum Type {
+	public enum Type implements Parcelable{
         PONG,
         CHOW,
         KONG,
         PAIR;
+
+        public static final Parcelable.Creator<Type> CREATOR = new Parcelable.Creator<Type>() {
+        	   
+            public Type createFromParcel(Parcel in) {
+                return Type.values()[in.readInt()];
+        	}
+     
+            public Type[] newArray(int size) {
+        		return new Type[size];
+            }
+             
+        };
+		@Override
+		public int describeContents() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeInt(ordinal());
+			
+		}
 	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeParcelable(type, flags);
+		out.writeString(representation);
+		out.writeParcelableArray(tiles.toArray(new Tile[tiles.size()]), flags);		
+	}
+	
+	public static final Parcelable.Creator<Combination> CREATOR = new Parcelable.Creator<Combination>() {
+        public Combination createFromParcel(Parcel in) {
+            return new Combination(in);
+        }
+
+        public Combination[] newArray(int size) {
+            return new Combination[size];
+        }
+    };
 }

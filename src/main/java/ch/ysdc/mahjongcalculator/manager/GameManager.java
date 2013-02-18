@@ -23,11 +23,6 @@ public class GameManager {
 
 	private static final String TILE_IMG_REGEX = "(tile_)(\\w{1})(\\w{1})";
 
-	// private static final String[] DRAGONS = { "dr", "dg", "dw" };
-	// private static final String[] WINDS = { "ve", "vs", "vw", "vn" };
-	// private static final String[] FLOWERS = { "ef", "sf", "wf", "nf" };
-	// private static final String[] SEASONS = { "es", "ss", "ws", "ns" };
-
 	/****************************************************************************
 	 * Generate tiles based on the image name given in parameter.
 	 * 

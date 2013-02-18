@@ -80,4 +80,6 @@
     <string name="game.flower.title">Player flowers</string>
     <string name="game.season.title">Player Seasons</string>
     <string name="game.player.tiles">Player Combinations</string>
+    <string name="main.next.single">Single possibility found.Define your game settings</string>
+    <string name="main.next.multi">Multiple possibility founds. Select one to continue.</string>
 </resources>

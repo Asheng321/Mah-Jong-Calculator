@@ -24,8 +24,7 @@
         </activity>
         <activity
             android:name="ch.ysdc.mahjongcalculator.SettingsActivity"
-            android:label="@string/settings.title"
-            android:parentActivityName=".MainActivity" >
+            android:label="@string/settings.title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

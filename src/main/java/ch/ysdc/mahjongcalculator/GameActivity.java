@@ -1,29 +1,37 @@
 package ch.ysdc.mahjongcalculator;
 
+import java.util.Collections;
+import java.util.HashMap;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import ch.ysdc.mahjongcalculator.calculation.Combination;
 import ch.ysdc.mahjongcalculator.calculation.Possibility;
+import ch.ysdc.mahjongcalculator.manager.FileManager;
+import ch.ysdc.mahjongcalculator.model.Tile;
+import ch.ysdc.mahjongcalculator.utils.AndroidUtils;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class GameActivity extends SherlockActivity implements ImageButton.OnClickListener{
+public class GameActivity extends SherlockActivity implements
+		ImageButton.OnClickListener {
 
-    private static String TAG = "GameActivity";
-    private Possibility possibility;
-    
+	private static String TAG = "GameActivity";
+	private Possibility possibility;
+
 	public static final int MSG_ERR = 0;
 	public static final int MSG_END = 1;
 	public static final int MSG_EMPTY_END = 2;
 	public static final int MSG_INFO = 3;
 
-	
 	protected static ProgressDialog mProgressDialog;
 
 	/****************************************************************************
@@ -49,12 +57,18 @@ public class GameActivity extends SherlockActivity implements ImageButton.OnClic
 	 *            supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it
 	 *            is null.</b>
 	 ****************************************************************************/
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
-        setContentView(R.layout.game);
-    }
+
+	    Bundle extras = getIntent().getExtras();
+	    if(getIntent().hasExtra(MainActivity.POSSIBILITY)){
+	    	possibility = extras.getParcelable(MainActivity.POSSIBILITY);
+	    }
+		
+		setContentView(R.layout.game);
+	}
 
 	/****************************************************************************
 	 * onPause
@@ -73,6 +87,25 @@ public class GameActivity extends SherlockActivity implements ImageButton.OnClic
 		super.onStart();
 		Log.d(TAG, "onStart");
 
+		FileManager fm = new FileManager(getFilesDir());
+
+		// Try to load saved open tiles
+		HashMap<String, Integer> ot = fm.readHashMap(MainActivity.POSSIBILITY);
+		
+		for (String key : ot.keySet()) {
+			for (int i = 0; i < ot.get(key); i++) {
+				addPlayerTile(key, false);
+			}
+		}
+
+		// Try to load saved hidden tiles
+		HashMap<String, Integer> ht = fm.readHashMap(MainActivity.POSSIBILITY);
+
+		for (String key : ht.keySet()) {
+			for (int i = 0; i < ht.get(key); i++) {
+				addPlayerTile(key, true);
+			}
+		}
 	}
 
 	/****************************************************************************
@@ -83,7 +116,20 @@ public class GameActivity extends SherlockActivity implements ImageButton.OnClic
 		super.onStop();
 		Log.d(TAG, "onStop");
 
+		FileManager fm = new FileManager(getFilesDir());
+		fm.saveHashMap(openTiles, OPEN_TILES_FILENAME);
+		fm.saveHashMap(hiddenTiles, HIDDEN_TILES_FILENAME);
+		
+		LinearLayout playerLayout = (LinearLayout) findViewById(R.id.main_player_open_tiles);
+		playerLayout.removeAllViews();
+
+		playerLayout = (LinearLayout) findViewById(R.id.main_player_hidden_tiles);
+		playerLayout.removeAllViews();
+		
+		openTiles = null;
+		hiddenTiles = null;
 	}
+
 
 	/****************************************************************************
 	 * onPause
@@ -114,6 +160,7 @@ public class GameActivity extends SherlockActivity implements ImageButton.OnClic
 		// Stop method tracing that the activity started during onCreate()
 		android.os.Debug.stopMethodTracing();
 	}
+
 	/****************************************************************************
 	 * Called when the user click on an action bar icon
 	 ****************************************************************************/
@@ -138,6 +185,7 @@ public class GameActivity extends SherlockActivity implements ImageButton.OnClic
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 	/****************************************************************************
 	 * WindSelected, called when the user select a wind
 	 ****************************************************************************/
@@ -146,7 +194,6 @@ public class GameActivity extends SherlockActivity implements ImageButton.OnClic
 		Log.d(TAG, "windSelected");
 
 	}
-
 
 	/****************************************************************************
 	 * FlowerSelected, called when the user select a flower
@@ -172,5 +219,56 @@ public class GameActivity extends SherlockActivity implements ImageButton.OnClic
 		// TODO Auto-generated method stub
 		Log.d(TAG, "onClick");
 	}
-}
 
+	/****************************************************************************
+	 * Called by the @method tileSelected method to add a tile to a player
+	 * 
+	 * @param tileTag
+	 *            the name of the tile to add
+	 * @param isPlayerHandSelected
+	 *            true if the tile must be add to the hidden list
+	 ****************************************************************************/
+	@SuppressWarnings("deprecation")
+	private void addTile(Combination combination) {
+
+		LinearLayout.LayoutParams paramsLO = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.WRAP_CONTENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT);
+
+		Collections.sort(combination.getTiles());
+
+		for (int i=0; i<combination.getTiles().size(); i++) {
+			
+			Tile tile = combination.getTiles().get(i);
+			
+			// Create the tile button to add to the view
+			ImageButton imgButton = new ImageButton(this);
+			imgButton.setImageResource(getResources().getIdentifier(
+					tile.getImg(), "drawable", this.getPackageName()));
+			imgButton.setTag(tile.getImg());
+
+			int padding = AndroidUtils.fromDpToPixels(AndroidUtils.COMBINATION_TILE_PADDING,
+					getResources().getDisplayMetrics().density);
+			
+			imgButton.setPadding((i==0?padding:0), padding, (i==(combination.getTiles().size()-1)?padding:0), padding);
+
+			// This test is necessary because of compatibility reason...
+			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+				imgButton.setBackgroundDrawable(null);
+			} else {
+				imgButton.setBackground(null);
+			}
+			imgButton.setId(tile.getId());
+			Log.d(TAG, "new player tile " + (String) imgButton.getTag()
+					+ " selected with ID: " + imgButton.getId());
+
+			// Get the player layout
+			LinearLayout playerLayout = (LinearLayout) (tile.getIsVisible() ? findViewById(R.id.main_player_open_tiles)
+					: findViewById(R.id.main_player_hidden_tiles));
+
+			// Add the tile button to the player list
+			playerLayout.addView(imgButton, paramsLO);
+		}
+
+	}
+}

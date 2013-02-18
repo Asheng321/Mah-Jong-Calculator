@@ -61,6 +61,49 @@ public class FileManager {
 
 		return (t == null ? new HashMap<String,Integer>() : t);
 	}
+
+	/****************************************************************************
+	 * Store a possibility in the file system
+	 ****************************************************************************/
+	public void saveHashMap(HashMap<String,Integer> t, String filename){
+		Log.d(TAG, "savePlayerTiles: " + t.size());
+		ObjectOutputStream outputStream = null;
+		try {
+				File file = new File(appFolder,filename);
+				outputStream = new ObjectOutputStream(new FileOutputStream(file));
+				outputStream.writeObject(t);
+				outputStream.flush();
+				outputStream.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.e(TAG, "Exception during savePlayerTiles", e);
+			}
+	}
+
+	/****************************************************************************
+	 * Read an hashmap in the file system
+	 ****************************************************************************/
+	@SuppressWarnings("unchecked")
+	public HashMap<String,Integer> readHashMap(String filename){
+		Log.d(TAG, "readPlayerTiles");
+		ObjectInputStream inputStream = null;
+		HashMap<String,Integer> t = null;
+		try {
+			File file = new File(appFolder,filename);
+			if(!file.exists()){
+				return new HashMap<String,Integer>();
+			}
+			inputStream = new ObjectInputStream(new FileInputStream(file));
+			t = (HashMap<String,Integer>)inputStream.readObject();
+			inputStream.close();
+			Log.d(TAG, "tiles: " + (t != null ? t.size() : "null"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e(TAG, "Exception during readPlayerTiles", e);
+		}
+
+		return (t == null ? new HashMap<String,Integer>() : t);
+	}
 //	private void loadGame(){
 //		Log.d(TAG, "loadGame");
 //		ObjectInputStream inputStream = null;

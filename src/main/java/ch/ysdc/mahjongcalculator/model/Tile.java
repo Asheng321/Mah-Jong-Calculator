@@ -75,7 +75,7 @@ public class Tile implements Comparable<Tile>, Parcelable{
 		no = in.readInt();
 		img = in.readString();
 		isVisible = Boolean.parseBoolean(in.readString());
-		category = Category.fromValue(in.readString());
+		category = in.readParcelable(Category.class.getClassLoader());
 	}
 
 	/*****************************************
@@ -191,7 +191,7 @@ public class Tile implements Comparable<Tile>, Parcelable{
 	}
 
 
-	public enum Category {
+	public enum Category implements Parcelable{
 
         BAMBOO("b"),
         CHARACTER("k"),
@@ -202,6 +202,18 @@ public class Tile implements Comparable<Tile>, Parcelable{
         SEASON("s");
         
         private String value;
+        
+        public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
+        	   
+            public Category createFromParcel(Parcel in) {
+                return Category.values()[in.readInt()];
+        	}
+     
+            public Category[] newArray(int size) {
+        		return new Category[size];
+            }
+             
+        };
         
         Category(String v){
         	value = v;
@@ -223,6 +235,17 @@ public class Tile implements Comparable<Tile>, Parcelable{
           }
           throw new IllegalArgumentException("No constant with value " + v + " found");
         }
+
+		@Override
+		public int describeContents() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			 dest.writeInt(ordinal());  			
+		}
 	}
 
 
@@ -243,8 +266,8 @@ public class Tile implements Comparable<Tile>, Parcelable{
 		out.writeInt(no);
 		out.writeString(img);
 		out.writeString(isVisible.toString());
-		out.writeString(category.value);
-	}
+		out.writeParcelable(category, flags);
+		}
 	public static final Parcelable.Creator<Tile> CREATOR = new Parcelable.Creator<Tile>() {
         public Tile createFromParcel(Parcel in) {
             return new Tile(in);
