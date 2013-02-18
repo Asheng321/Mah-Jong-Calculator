@@ -4,15 +4,16 @@
  */
 package ch.ysdc.mahjongcalculator;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.actionbarsherlock.app.SherlockActivity;
 
 /**
  *
  * @author djohannot
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends SherlockActivity {
 
     private static String TAG = "settingsActivity";
 

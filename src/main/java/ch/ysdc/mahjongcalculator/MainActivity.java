@@ -46,14 +46,10 @@ public class MainActivity extends SherlockActivity implements
 	private static String TAG = "mainActivity";
 
 	public static final int MSG_ERR = 0;
-	public static final int MSG_END = 1;
-	public static final int MSG_EMPTY_END = 2;
+	public static final int MSG_SINGLE_END = 1;
+	public static final int MSG_MULTI_END = 2;
 	public static final int MSG_INFO = 3;
 
-	// public static final String GAME_FILENAME =
-	// "ch.ysdc.mahjongcalculator.GAME";
-	// public static final String HAND_FILENAME =
-	// "ch.ysdc.mahjongcalculator.HAND";
     public static final String POSSIBILITY = "ch.ysdc.mahjongcalculator.POSSIBILITY";
 	public static final String OPEN_TILES_FILENAME = "ch.ysdc.mahjongcalculator.OPENPLAYERTILES";
 	public static final String HIDDEN_TILES_FILENAME = "ch.ysdc.mahjongcalculator.HIDDENPLAYERTILES";
@@ -62,13 +58,13 @@ public class MainActivity extends SherlockActivity implements
 	private static int tileCounter;
 	private static int tileSelected;
 
-	// private static Game currentGame;
 	private static HashMap<String, Integer> openTiles;
 	private static HashMap<String, Integer> hiddenTiles;
 
 	private static SharedPreferences mPrefs;
 	private static Context mContext;
 	protected static ProgressDialog mProgressDialog;
+	protected static List<Possibility> possibilities;
 
 	/****************************************************************************
 	 * Called automatically to create the action bar
@@ -475,7 +471,7 @@ public class MainActivity extends SherlockActivity implements
 					mHandler.sendMessage(msg);
 
 					CombinationManager calculator = new CombinationManager();
-					List<Possibility> possibilities = calculator.getPossibilities(tiles);
+					possibilities = calculator.getPossibilities(tiles);
     				
 					switch (possibilities.size()) {
 					case 0:
@@ -488,21 +484,18 @@ public class MainActivity extends SherlockActivity implements
 					case 1:
 						// if only one possibility
 	    				// create and send the message to our handler
-	    				msg = mHandler.obtainMessage(MSG_END,getString(R.string.main.next.single));
-	    				mHandler.sendMessage(msg);
 	    				Log.d(TAG, "1 possibility");
-
+	    				msg = mHandler.obtainMessage(MSG_SINGLE_END,getString(R.string.main_next_single));
+	    				mHandler.sendMessage(msg);
 	    				//open new game activity
-	    				Intent intent = new Intent(this, GameActivity.class);
-	    				intent.putExtra(POSSIBILITY, possibilities.get(0));
-	    				startActivity(intent);
+	    				Intent intent3 = new Intent(GameActivity.ACTION_GAME);
+	    				intent3.putExtra(POSSIBILITY, possibilities.get(0));
+	    				startActivity(intent3);
 						break;
 					default:
 	    				Log.d(TAG, "many possibilities: " + possibilities.size());
-	    				msg = mHandler.obtainMessage(MSG_END,getString(R.string.main.next.multi));
+	    				msg = mHandler.obtainMessage(MSG_MULTI_END,getString(R.string.main_next_multi));
 	    				mHandler.sendMessage(msg);
-						// if multiply possibilities, open the selection
-						// activity
 						break;
 					}
 				}
@@ -534,29 +527,6 @@ public class MainActivity extends SherlockActivity implements
 		}
 	}
 
-	// private void persistGame() {
-	// DatabaseManager db = DatabaseManager.getInstance();
-	//
-	// for(Map.Entry<String, Integer> entry : hiddenTiles.entrySet()){
-	// Tile t = db.getTilesWithImageName(entry.getKey()).get(0);
-	// t.setIsVisible(false);
-	// currentGame.getHand().addTile(t);
-	// t.setHand(currentGame.getHand());
-	// db.updateHand(currentGame.getHand());
-	// db.updateTile(t);
-	// }
-	//
-	// for(Map.Entry<String, Integer> entry : openTiles.entrySet()){
-	// Tile t = db.getTilesWithImageName(entry.getKey()).get(0);
-	// t.setIsVisible(true);
-	// currentGame.getHand().addTile(t);
-	// t.setHand(currentGame.getHand());
-	// db.updateHand(currentGame.getHand());
-	// db.updateTile(t);
-	// }
-	//
-	// }
-
 	/****************************************************************************
 	 * Return true if the option button selected is the hidden tile
 	 ****************************************************************************/
@@ -584,14 +554,14 @@ public class MainActivity extends SherlockActivity implements
 					mProgressDialog.dismiss();
 				}
 				break;
-			case MSG_END:
+			case MSG_SINGLE_END:
 				Toast.makeText(mContext, ((String) msg.obj), Toast.LENGTH_LONG)
 						.show();
 				if (mProgressDialog.isShowing()) {
 					mProgressDialog.dismiss();
 				}
 				break;
-			case MSG_EMPTY_END:
+			case MSG_MULTI_END:
 				if (mProgressDialog.isShowing()) {
 					mProgressDialog.dismiss();
 				}
@@ -603,3 +573,5 @@ public class MainActivity extends SherlockActivity implements
 		}
 	};
 }
+
+

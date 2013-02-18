@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import ch.ysdc.mahjongcalculator.model.Combination;
 import ch.ysdc.mahjongcalculator.model.Tile;
 
 public class Possibility implements Parcelable {
@@ -18,7 +19,7 @@ public class Possibility implements Parcelable {
 	private boolean isValid;
 	private List<Tile> unusedTiles;
 	private List<Combination> combinations;
-	private Tile[] pair;
+	private Combination pair;
 	
 
 	/*****************************************
@@ -29,7 +30,7 @@ public class Possibility implements Parcelable {
 		isValid = p.isValid;
 		unusedTiles = new CopyOnWriteArrayList<Tile>(p.unusedTiles);
 		combinations =  new CopyOnWriteArrayList<Combination>(p.combinations);
-		pair = p.pair;
+		pair =  p.getPair();
 	}
 	
 	Possibility(List<Tile> t, List<Combination> c){
@@ -44,10 +45,10 @@ public class Possibility implements Parcelable {
 	public Possibility(Parcel in) {
 		id = in.readInt();
 		isValid = Boolean.valueOf(in.readString());
-		pair = new Tile[2];
-		pair[0] = in.readParcelable(Tile.class.getClassLoader());
-		pair[1] = in.readParcelable(Tile.class.getClassLoader());
-		combinations = Arrays.asList((Combination[])in.readParcelableArray(Combination.class.getClassLoader()));
+		pair = in.readParcelable(Combination.class.getClassLoader());
+
+		combinations = new LinkedList<Combination>();
+		in.readTypedList(combinations, Combination.CREATOR);
 	}
 
 	/*****************************************
@@ -69,10 +70,6 @@ public class Possibility implements Parcelable {
 	
 	public void addTile(Tile t){
 		unusedTiles.add(t);
-	}
-	
-	public void setPair(Tile t1, Tile t2){
-		pair = new Tile[]{t1,t2};
 	}
 	/*****************************************
 	GETTER AND SETTER 
@@ -110,8 +107,12 @@ public class Possibility implements Parcelable {
 		this.id = id;
 	}
 	
-	public Tile[] getPair() {
+	public Combination getPair() {
 		return pair;
+	}
+
+	public void setPair(Combination pair) {
+		this.pair = pair;
 	}
 
 	/*****************************************
@@ -174,9 +175,13 @@ public class Possibility implements Parcelable {
 		return false;
 	}
 
-	public boolean samePair(Tile[] pair2) {
+	public boolean samePair(Combination pair2) {
 		// TODO Auto-generated method stub
-		return pair[0].getImg().equals(pair2[0].getImg());
+		if((pair.getRepresentation().equals(pair2.getRepresentation())) && (pair.getType() == pair2.getType())){
+			//We leave the combination loop
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -190,11 +195,8 @@ public class Possibility implements Parcelable {
 		// TODO Auto-generated method stub
 		out.writeInt(id);
 		out.writeString(String.valueOf(isValid));
-		out.writeParcelable(pair[0], flag);
-		out.writeParcelable(pair[1], flag);
-		out.writeParcelableArray(combinations.toArray(new Combination[combinations.size()]), flag);
-		
-		
+		out.writeParcelable(pair, flag);
+		out.writeTypedList(combinations);
 	}
 	public static final Parcelable.Creator<Possibility> CREATOR = new Parcelable.Creator<Possibility>() {
         public Possibility createFromParcel(Parcel in) {

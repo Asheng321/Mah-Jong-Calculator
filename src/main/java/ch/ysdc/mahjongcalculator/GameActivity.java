@@ -1,7 +1,6 @@
 package ch.ysdc.mahjongcalculator;
 
 import java.util.Collections;
-import java.util.HashMap;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,9 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import ch.ysdc.mahjongcalculator.calculation.Combination;
 import ch.ysdc.mahjongcalculator.calculation.Possibility;
 import ch.ysdc.mahjongcalculator.manager.FileManager;
+import ch.ysdc.mahjongcalculator.model.Combination;
+import ch.ysdc.mahjongcalculator.model.Hand;
 import ch.ysdc.mahjongcalculator.model.Tile;
 import ch.ysdc.mahjongcalculator.utils.AndroidUtils;
 
@@ -21,11 +21,13 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+
 public class GameActivity extends SherlockActivity implements
 		ImageButton.OnClickListener {
 
 	private static String TAG = "GameActivity";
-	private Possibility possibility;
+	public static final String ACTION_GAME = "ch.ysdc.mahjongcalculator.action.GAME";
+	private Hand hand;
 
 	public static final int MSG_ERR = 0;
 	public static final int MSG_END = 1;
@@ -64,7 +66,11 @@ public class GameActivity extends SherlockActivity implements
 
 	    Bundle extras = getIntent().getExtras();
 	    if(getIntent().hasExtra(MainActivity.POSSIBILITY)){
-	    	possibility = extras.getParcelable(MainActivity.POSSIBILITY);
+	    	Possibility possibility = extras.getParcelable(MainActivity.POSSIBILITY);
+	    	if(possibility != null){
+	    		hand = new Hand(possibility);
+	    	}
+	    	getIntent().removeExtra(MainActivity.POSSIBILITY);
 	    }
 		
 		setContentView(R.layout.game);
@@ -89,23 +95,13 @@ public class GameActivity extends SherlockActivity implements
 
 		FileManager fm = new FileManager(getFilesDir());
 
-		// Try to load saved open tiles
-		HashMap<String, Integer> ot = fm.readHashMap(MainActivity.POSSIBILITY);
-		
-		for (String key : ot.keySet()) {
-			for (int i = 0; i < ot.get(key); i++) {
-				addPlayerTile(key, false);
-			}
+		Log.d(TAG, "hand on start" + hand);
+		if(hand == null){
+			// Try to load saved hand
+			hand = fm.readHand(MainActivity.POSSIBILITY);
 		}
-
-		// Try to load saved hidden tiles
-		HashMap<String, Integer> ht = fm.readHashMap(MainActivity.POSSIBILITY);
-
-		for (String key : ht.keySet()) {
-			for (int i = 0; i < ht.get(key); i++) {
-				addPlayerTile(key, true);
-			}
-		}
+		Log.d(TAG, "nb combo: " + hand.getCombinations().size());
+		initializeView();
 	}
 
 	/****************************************************************************
@@ -116,20 +112,11 @@ public class GameActivity extends SherlockActivity implements
 		super.onStop();
 		Log.d(TAG, "onStop");
 
+		Log.d(TAG, "nb combo: " + hand.getCombinations().size());
 		FileManager fm = new FileManager(getFilesDir());
-		fm.saveHashMap(openTiles, OPEN_TILES_FILENAME);
-		fm.saveHashMap(hiddenTiles, HIDDEN_TILES_FILENAME);
-		
-		LinearLayout playerLayout = (LinearLayout) findViewById(R.id.main_player_open_tiles);
-		playerLayout.removeAllViews();
-
-		playerLayout = (LinearLayout) findViewById(R.id.main_player_hidden_tiles);
-		playerLayout.removeAllViews();
-		
-		openTiles = null;
-		hiddenTiles = null;
+		fm.saveHand(hand, MainActivity.POSSIBILITY);
+		resetView();
 	}
-
 
 	/****************************************************************************
 	 * onPause
@@ -263,12 +250,35 @@ public class GameActivity extends SherlockActivity implements
 					+ " selected with ID: " + imgButton.getId());
 
 			// Get the player layout
-			LinearLayout playerLayout = (LinearLayout) (tile.getIsVisible() ? findViewById(R.id.main_player_open_tiles)
-					: findViewById(R.id.main_player_hidden_tiles));
+			LinearLayout playerLayout = (LinearLayout) (tile.getIsVisible() ? findViewById(R.id.game_player_open_tiles)
+					: findViewById(R.id.game_player_hidden_tiles));
 
 			// Add the tile button to the player list
 			playerLayout.addView(imgButton, paramsLO);
 		}
+	}
 
+	/****************************************************************************
+	 *Called to set the view with the current hand
+	 ****************************************************************************/
+	private void initializeView() {
+
+		for(Combination combination : hand.getCombinations()){
+			addTile(combination);
+		}
+	}
+
+	/****************************************************************************
+	 * Clear the view from all it's hand specific content (tiles, etc)
+	 ****************************************************************************/
+	private void resetView() {
+		
+		LinearLayout playerLayout = (LinearLayout) findViewById(R.id.game_player_open_tiles);
+		playerLayout.removeAllViews();
+
+		playerLayout = (LinearLayout) findViewById(R.id.game_player_hidden_tiles);
+		playerLayout.removeAllViews();
+		
+		hand = null;
 	}
 }

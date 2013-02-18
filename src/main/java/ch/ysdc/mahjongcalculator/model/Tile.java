@@ -4,6 +4,7 @@
  */
 package ch.ysdc.mahjongcalculator.model;
 
+import java.io.Serializable;
 import java.util.regex.Pattern;
 
 import android.os.Parcel;
@@ -17,8 +18,9 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author djohannot
  */
 @DatabaseTable
-public class Tile implements Comparable<Tile>, Parcelable{
+public class Tile implements Comparable<Tile>, Parcelable, Serializable{
 
+	private static final long serialVersionUID = 2906435803297285109L;
 	private static int counter = 0;
     public static final String ID_FIELD_NAME = "id";
     public static final String NO_FIELD_NAME = "no";
@@ -38,11 +40,8 @@ public class Tile implements Comparable<Tile>, Parcelable{
     private Boolean isVisible;
     @DatabaseField(columnName = CATEGORY_FIELD_NAME)
     private Category category;
-
     @DatabaseField(foreign = true, columnName = HAND_FIELD_NAME)
     private Hand hand;
-    @DatabaseField(foreign = true, columnName = GAME_FIELD_NAME)
-    private Game game;
     
     public Tile(){
         super();
@@ -76,6 +75,7 @@ public class Tile implements Comparable<Tile>, Parcelable{
 		img = in.readString();
 		isVisible = Boolean.parseBoolean(in.readString());
 		category = in.readParcelable(Category.class.getClassLoader());
+		hand = in.readParcelable(Hand.class.getClassLoader());
 	}
 
 	/*****************************************
@@ -132,14 +132,6 @@ public class Tile implements Comparable<Tile>, Parcelable{
 
 	public void setHand(Hand hand) {
 		this.hand = hand;
-	}
-
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
-		this.game = game;
 	}
 
 	@Override
@@ -267,6 +259,7 @@ public class Tile implements Comparable<Tile>, Parcelable{
 		out.writeString(img);
 		out.writeString(isVisible.toString());
 		out.writeParcelable(category, flags);
+		out.writeParcelable(hand, flags);
 		}
 	public static final Parcelable.Creator<Tile> CREATOR = new Parcelable.Creator<Tile>() {
         public Tile createFromParcel(Parcel in) {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.util.Log;
+import ch.ysdc.mahjongcalculator.model.Combination;
 import ch.ysdc.mahjongcalculator.model.Tile;
 
 public class CombinationManager {
@@ -112,7 +113,7 @@ public class CombinationManager {
 						Log.d(TAG, "* Possibility invalid, second pair!");
 						return;
 					}
-					possibility.setPair(combinations.get(0).getTiles().getFirst(), combinations.get(0).getTiles().getLast());
+					possibility.setPair(combinations.get(0));
 				}else{
 					possibility.addCombinations(combinations.get(0));
 				}
@@ -130,7 +131,7 @@ public class CombinationManager {
 						Log.d(TAG, "* Possibility invalid, second pair!");
 						return;
 					}
-					possibility.setPair(firstCombination.getTiles().getFirst(), firstCombination.getTiles().getLast());
+					possibility.setPair(firstCombination);
 				}else{
 					possibility.addCombinations(firstCombination);
 				}
@@ -158,7 +159,7 @@ public class CombinationManager {
 				Log.d(TAG, "* Possibility invalid, second pair!");
 				return;
 			}
-			possibility.setPair(c.getTiles().getFirst(), c.getTiles().getLast());
+			possibility.setPair(c);
 		}else{
 			possibility.addCombinations(c);
 		}
@@ -176,8 +177,7 @@ public class CombinationManager {
 		Log.d(TAG, "## clearTilesFromUnused");
 		
 		//We don't take the first because it's the parent, who was already removed
-		for(int i=0; i<combination.getTiles().size(); i++){
-			Tile t = combination.getTiles().get(i);
+		for(Tile t : combination.getTiles()){
 			if(!possibility.getUnusedTiles().remove(t)){
 				Log.d(TAG, "not found");
 			}else{

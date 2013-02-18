@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 import android.util.Log;
+import ch.ysdc.mahjongcalculator.model.Hand;
 
 public class FileManager {
 
@@ -63,77 +64,44 @@ public class FileManager {
 	}
 
 	/****************************************************************************
-	 * Store a possibility in the file system
+	 * Store a hand in the file system
 	 ****************************************************************************/
-	public void saveHashMap(HashMap<String,Integer> t, String filename){
-		Log.d(TAG, "savePlayerTiles: " + t.size());
+	public void saveHand(Hand hand, String filename){
+		Log.d(TAG, "saveHand: " + hand);
 		ObjectOutputStream outputStream = null;
 		try {
 				File file = new File(appFolder,filename);
 				outputStream = new ObjectOutputStream(new FileOutputStream(file));
-				outputStream.writeObject(t);
+				outputStream.writeObject(hand);
 				outputStream.flush();
 				outputStream.close();
 			} catch (Exception e) {
 				e.printStackTrace();
-				Log.e(TAG, "Exception during savePlayerTiles", e);
+				Log.e(TAG, "Exception during saveHand", e);
 			}
 	}
 
 	/****************************************************************************
-	 * Read an hashmap in the file system
+	 * Read an hand in the file system
 	 ****************************************************************************/
-	@SuppressWarnings("unchecked")
-	public HashMap<String,Integer> readHashMap(String filename){
-		Log.d(TAG, "readPlayerTiles");
+	public Hand readHand(String filename){
+		Log.d(TAG, "readHand");
 		ObjectInputStream inputStream = null;
-		HashMap<String,Integer> t = null;
+		Hand hand = null;
 		try {
 			File file = new File(appFolder,filename);
 			if(!file.exists()){
-				return new HashMap<String,Integer>();
+				return null;
 			}
 			inputStream = new ObjectInputStream(new FileInputStream(file));
-			t = (HashMap<String,Integer>)inputStream.readObject();
+			hand = (Hand)inputStream.readObject();
 			inputStream.close();
-			Log.d(TAG, "tiles: " + (t != null ? t.size() : "null"));
+			Log.d(TAG, "hand: " + hand);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.e(TAG, "Exception during readPlayerTiles", e);
+			Log.e(TAG, "Exception during readHand", e);
 		}
-
-		return (t == null ? new HashMap<String,Integer>() : t);
+		return (hand != null ? hand : new Hand());
 	}
-//	private void loadGame(){
-//		Log.d(TAG, "loadGame");
-//		ObjectInputStream inputStream = null;
-//		try {
-//			File file = new File(getFilesDir(),GAME_FILENAME);
-//			if(file.exists()){
-//				inputStream = new ObjectInputStream(new FileInputStream(file));
-//				currentGame = (Game)inputStream.readObject();
-//				inputStream.close();
-//				Log.d(TAG, "Loaded Game: " + currentGame + "," + currentGame.getHand());
-//			}else{
-//				Log.d(TAG, "No game to load");
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			Log.e(TAG, "Exception during loadGame", e);
-//		}
-//	}
-//	private void saveGame(){
-//		Log.d(TAG, "saveGame: " + currentGame + "," + currentGame.getHand());
-//		ObjectOutputStream outputStream = null;
-//		try {
-//				File file = new File(getFilesDir(),GAME_FILENAME);
-//				outputStream = new ObjectOutputStream(new FileOutputStream(file));
-//				outputStream.writeObject(currentGame);
-//				outputStream.flush();
-//				outputStream.close();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				Log.e(TAG, "Exception during saveGame", e);
-//			}
-//	}
+
 }
