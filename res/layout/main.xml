@@ -1,86 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-    <ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/main.title.layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-    <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/main.player.tiles"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="10dp"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-        <Button
-            android:id="@+id/main.delete.btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:onClick="deleteTile"
-            android:text="@string/action.delete" />
-    </LinearLayout>
-
-    <!-- USERS TILES -->
-    <!-- OPEN TILES -->
-
-    <HorizontalScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:orientation="vertical" >
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/main.player.open.tiles"
-            android:layout_width="wrap_content"
+            android:id="@+id/main.title.layout"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:minHeight="40dp"
-            android:orientation="horizontal"
-            android:padding="4dp" >
+            android:orientation="horizontal" >
+
+            <TextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/main.player.tiles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Button
+                android:id="@+id/main.delete.btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:onClick="deleteTile"
+                android:text="@string/action.delete" />
         </LinearLayout>
-    </HorizontalScrollView>
 
-    <!-- HAND TILES -->
+        <!-- USERS TILES -->
+        <!-- OPEN TILES -->
 
-    <HorizontalScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
+        <HorizontalScrollView
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/main.player.hidden.tiles"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="40dp"
-            android:orientation="horizontal"
-            android:padding="4dp" >
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/main.player.open.tiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:orientation="horizontal"
+                android:padding="4dp" >
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- HAND TILES -->
+
+        <HorizontalScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/main.player.hidden.tiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:orientation="horizontal"
+                android:padding="4dp" >
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <RadioGroup
             android:id="@+id/main.add.type"
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
             <RadioButton
                 android:id="@+id/main.add.hidden"
-                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:checked="true"
                 android:text="@string/main.add.hidden" />
+
             <RadioButton
                 android:id="@+id/main.add.open"
                 android:layout_width="wrap_content"
@@ -88,470 +93,471 @@
                 android:layout_weight="1"
                 android:text="@string/main.add.open" />
         </RadioGroup>
-    <!-- AVAILABLE TILES -->
+        <!-- AVAILABLE TILES -->
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="@string/main.tiles.available"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    <!-- BAMBOOS -->
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/main.tiles.available"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <!-- BAMBOOS -->
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:text="@string/main.tiles.bamboos" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:text="@string/main.tiles.bamboos" />
 
-    <HorizontalScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
+        <HorizontalScrollView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.1"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_1b"
+                    android:tag="tile_1b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.2"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_2b"
+                    android:tag="tile_2b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.3"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_3b"
+                    android:tag="tile_3b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.4"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_4b"
+                    android:tag="tile_4b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.5"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_5b"
+                    android:tag="tile_5b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.6"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_6b"
+                    android:tag="tile_6b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.7"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_7b"
+                    android:tag="tile_7b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.8"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_8b"
+                    android:tag="tile_8b" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.bamboo.9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.bamboo.9"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_9b"
+                    android:tag="tile_9b" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- CHARACTERS -->
+
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:paddingTop="4dp"
+            android:text="@string/main.tiles.characters" />
 
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.1"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_1b"
-                android:tag="tile_1b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.2"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_2b"
-                android:tag="tile_2b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.3"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_3b"
-                android:tag="tile_3b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.4"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_4b"
-                android:tag="tile_4b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.5"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_5b"
-                android:tag="tile_5b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.6"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_6b"
-                android:tag="tile_6b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.7"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_7b"
-                android:tag="tile_7b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.8"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_8b"
-                android:tag="tile_8b" />
-
-            <ImageButton
-                android:id="@+id/main.tile.bamboo.9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.bamboo.9"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_9b"
-                android:tag="tile_9b" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <!-- CHARACTERS -->
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:text="@string/main.tiles.characters" />
-
-    <HorizontalScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
+        <HorizontalScrollView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.1"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_1k"
+                    android:tag="tile_1k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.2"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_2k"
+                    android:tag="tile_2k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.3"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_3k"
+                    android:tag="tile_3k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.4"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_4k"
+                    android:tag="tile_4k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.5"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_5k"
+                    android:tag="tile_5k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.6"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_6k"
+                    android:tag="tile_6k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.7"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_7k"
+                    android:tag="tile_7k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.8"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_8k"
+                    android:tag="tile_8k" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.character.9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.character.9"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_9k"
+                    android:tag="tile_9k" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- CIRCLES -->
+
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:paddingTop="4dp"
+            android:text="@string/main.tiles.circles" />
 
-            <ImageButton
-                android:id="@+id/main.tile.character.1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.1"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_1k"
-                android:tag="tile_1k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.2"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_2k"
-                android:tag="tile_2k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.3"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_3k"
-                android:tag="tile_3k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.4"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_4k"
-                android:tag="tile_4k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.5"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_5k"
-                android:tag="tile_5k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.6"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_6k"
-                android:tag="tile_6k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.7"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_7k"
-                android:tag="tile_7k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.8"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_8k"
-                android:tag="tile_8k" />
-
-            <ImageButton
-                android:id="@+id/main.tile.character.9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.character.9"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_9k"
-                android:tag="tile_9k" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <!-- CIRCLES -->
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:text="@string/main.tiles.circles" />
-
-    <HorizontalScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
+        <HorizontalScrollView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.1"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_1c"
+                    android:tag="tile_1c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.2"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_2c"
+                    android:tag="tile_2c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.3"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_3c"
+                    android:tag="tile_3c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.4"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_4c"
+                    android:tag="tile_4c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.5"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_5c"
+                    android:tag="tile_5c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.6"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_6c"
+                    android:tag="tile_6c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.7"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_7c"
+                    android:tag="tile_7c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.8"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_8c"
+                    android:tag="tile_8c" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.circle.9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.circle.9"
+                    android:onClick="tileSelected"
+                    android:padding="4dp"
+                    android:src="@drawable/tile_9c"
+                    android:tag="tile_9c" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- HONORS -->
+
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:paddingTop="4dp"
+            android:text="@string/main.tiles.honors" />
 
-            <ImageButton
-                android:id="@+id/main.tile.circle.1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.1"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_1c"
-                android:tag="tile_1c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.2"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_2c"
-                android:tag="tile_2c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.3"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_3c"
-                android:tag="tile_3c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.4"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_4c"
-                android:tag="tile_4c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.5"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_5c"
-                android:tag="tile_5c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.6"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_6c"
-                android:tag="tile_6c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.7"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_7c"
-                android:tag="tile_7c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.8"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_8c"
-                android:tag="tile_8c" />
-
-            <ImageButton
-                android:id="@+id/main.tile.circle.9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.circle.9"
-                android:onClick="tileSelected"
-                android:padding="4dp"
-                android:src="@drawable/tile_9c"
-                android:tag="tile_9c" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <!-- HONORS -->
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:text="@string/main.tiles.honors" />
-
-    <HorizontalScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
+        <HorizontalScrollView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content" >
 
-            <ImageButton
-                android:id="@+id/main.tile.honor.ew"
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.ew"
-                android:onClick="tileSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_1w"
-                android:tag="tile_1w" />
+                android:orientation="horizontal" >
 
-            <ImageButton
-                android:id="@+id/main.tile.honor.sw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.sw"
-                android:onClick="tileSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_2w"
-                android:tag="tile_2w" />
+                <ImageButton
+                    android:id="@+id/main.tile.honor.ew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.ew"
+                    android:onClick="tileSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_1w"
+                    android:tag="tile_1w" />
 
-            <ImageButton
-                android:id="@+id/main.tile.honor.ww"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.ww"
-                android:onClick="tileSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_3w"
-                android:tag="tile_3w" />
+                <ImageButton
+                    android:id="@+id/main.tile.honor.sw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.sw"
+                    android:onClick="tileSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_2w"
+                    android:tag="tile_2w" />
 
-            <ImageButton
-                android:id="@+id/main.tile.honor.nw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.nw"
-                android:onClick="tileSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_4w"
-                android:tag="tile_4w" />
+                <ImageButton
+                    android:id="@+id/main.tile.honor.ww"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.ww"
+                    android:onClick="tileSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_3w"
+                    android:tag="tile_3w" />
 
-            <ImageButton
-                android:id="@+id/main.tile.honor.rd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.rd"
-                android:onClick="tileSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_2d"
-                android:tag="tile_2d" />
+                <ImageButton
+                    android:id="@+id/main.tile.honor.nw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.nw"
+                    android:onClick="tileSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_4w"
+                    android:tag="tile_4w" />
 
-            <ImageButton
-                android:id="@+id/main.tile.honor.gd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.gd"
-                android:onClick="tileSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_3d"
-                android:tag="tile_3d" />
+                <ImageButton
+                    android:id="@+id/main.tile.honor.rd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.rd"
+                    android:onClick="tileSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_2d"
+                    android:tag="tile_2d" />
 
-            <ImageButton
-                android:id="@+id/main.tile.honor.wd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.wd"
-                android:onClick="tileSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_1d"
-                android:tag="tile_1d" />
-        </LinearLayout>
-    </HorizontalScrollView>
-</LinearLayout>
+                <ImageButton
+                    android:id="@+id/main.tile.honor.gd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.gd"
+                    android:onClick="tileSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_3d"
+                    android:tag="tile_3d" />
+
+                <ImageButton
+                    android:id="@+id/main.tile.honor.wd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.wd"
+                    android:onClick="tileSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_1d"
+                    android:tag="tile_1d" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
 </ScrollView>

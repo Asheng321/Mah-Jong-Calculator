@@ -6,6 +6,7 @@ package ch.ysdc.mahjongcalculator;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,7 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import ch.ysdc.mahjongcalculator.calculation.Calculator;
+import ch.ysdc.mahjongcalculator.calculation.CombinationManager;
 import ch.ysdc.mahjongcalculator.calculation.Possibility;
 import ch.ysdc.mahjongcalculator.manager.DatabaseManager;
 import ch.ysdc.mahjongcalculator.manager.FileManager;
@@ -43,6 +44,7 @@ public class MainActivity extends SherlockActivity implements
 		ImageButton.OnClickListener {
 
 	private static String TAG = "mainActivity";
+    public static final String POSSIBILITY = "ch.ysdc.mahjongcalculator.POSSIBILITY";
 
 	public static final int DEFAULT_TILE_PADDING = 2;
 	public static final int MSG_ERR = 0;
@@ -451,66 +453,72 @@ public class MainActivity extends SherlockActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "optionSelected: " + item.getItemId());
 		switch (item.getItemId()) {
-		case R.id.option_next:
-			// Initialize the progress window
-			mProgressDialog = ProgressDialog.show(this,
-					getString(R.string.main_next_title),
-					getString(R.string.main_next_tiles), true);
-
-			// Create the thread that will initialize our DB
-			new Thread((new Runnable() {
-				@Override
-				public void run() {
-
-					// Create the tiles object from the hash map (image name)
-					LinkedList<Tile> tiles = GameManager.createTiles(openTiles,
-							true);
-					tiles.addAll(GameManager.createTiles(hiddenTiles, false));
-
-					// calculate possibilities
-					Message msg = mHandler.obtainMessage(MSG_INFO,
-							getString(R.string.main_next_possibilities));
-					mHandler.sendMessage(msg);
-
-					Calculator calculator = new Calculator();
-					LinkedList<Possibility> possibilities = calculator
-							.getPossibilities(tiles);
-    				
-					switch (possibilities.size()) {
-					case 0:
-						// if no possibility
-	    				// create and send the error message to our handler
-	    				msg = mHandler.obtainMessage(MSG_ERR,getString(R.string.error_invalid_tiles));
-	    				mHandler.sendMessage(msg);
-	    				Log.d(TAG, "no possibility");
-						break;
-					case 1:
-						// if only one possibility
-	    				// create and send the message to our handler
-	    				msg = mHandler.obtainMessage(MSG_EMPTY_END,null);
-	    				mHandler.sendMessage(msg);
-	    				Log.d(TAG, "1 possibility");
-
-	    				//open new game activity
-//	    				Intent intent = new Intent(this, SettingsActivity.class);
-//	    				startActivity(intent);
-						break;
-					default:
-	    				Log.d(TAG, "many possibilities: " + possibilities.size());
-						// if multiply possibilities, open the selection
-						// activity
-						break;
-					}
-				}
-			})).start();
-
-			return true;
-		case R.id.option_settings:
-			Log.d(TAG, "Enter the settings Option case");
-			Intent intent = new Intent(this, SettingsActivity.class);
+		case R.id.main_option_next:
+			Intent intent = new Intent(this, GameActivity.class);
 			startActivity(intent);
+			// Initialize the progress window
+//			mProgressDialog = ProgressDialog.show(this,
+//					getString(R.string.main_next_title),
+//					getString(R.string.main_next_tiles), true);
+//
+//			// Create the thread that will initialize our DB
+//			new Thread((new Runnable() {
+//				@Override
+//				public void run() {
+//
+//					Tile.resetCounter();
+//					// Create the tiles object from the hash map (image name)
+//					LinkedList<Tile> tiles = GameManager.createTiles(openTiles,
+//							true);
+//					tiles.addAll(GameManager.createTiles(hiddenTiles, false));
+//
+//					// calculate possibilities
+//					Message msg = mHandler.obtainMessage(MSG_INFO,
+//							getString(R.string.main_next_possibilities));
+//					mHandler.sendMessage(msg);
+//
+//					Calculator calculator = new Calculator();
+//					List<Possibility> possibilities = calculator
+//							.getPossibilities(tiles);
+//    				
+//					switch (possibilities.size()) {
+//					case 0:
+//						// if no possibility
+//	    				// create and send the error message to our handler
+//	    				msg = mHandler.obtainMessage(MSG_ERR,getString(R.string.error_invalid_tiles));
+//	    				mHandler.sendMessage(msg);
+//	    				Log.d(TAG, "no possibility");
+//						break;
+//					case 1:
+//						// if only one possibility
+//	    				// create and send the message to our handler
+//	    				msg = mHandler.obtainMessage(MSG_EMPTY_END,null);
+//	    				mHandler.sendMessage(msg);
+//	    				Log.d(TAG, "1 possibility");
+//
+//	    				//open new game activity
+////	    				Intent intent = new Intent(this, GameActivity.class);
+////	    				intent.putExtra(POSSIBILITY, possibilities.get(0));
+////	    				startActivity(intent);
+//						break;
+//					default:
+//	    				Log.d(TAG, "many possibilities: " + possibilities.size());
+//	    				msg = mHandler.obtainMessage(MSG_EMPTY_END,null);
+//	    				mHandler.sendMessage(msg);
+//						// if multiply possibilities, open the selection
+//						// activity
+//						break;
+//					}
+//				}
+//			})).start();
+
 			return true;
-		case R.id.option_about:
+		case R.id.main_option_settings:
+			Log.d(TAG, "Enter the settings Option case");
+			Intent intent2 = new Intent(this, SettingsActivity.class);
+			startActivity(intent2);
+			return true;
+		case R.id.main_option_about:
 			// Log.d(TAG, "\nDisplay tile with hand");
 			// for(Tile t :
 			// DatabaseManager.getInstance().getGameTiles(currentGame)){
@@ -519,7 +527,7 @@ public class MainActivity extends SherlockActivity implements
 			// }
 			// }
 			return true;
-		case R.id.option_exit:
+		case R.id.main_option_exit:
 			// Log.d(TAG, "\nDisplay hand tiles");
 			// for(Tile t : currentGame.getTiles()){
 			// Log.d(TAG, "Tile: " + t);

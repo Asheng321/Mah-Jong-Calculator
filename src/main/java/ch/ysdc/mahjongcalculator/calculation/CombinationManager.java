@@ -2,21 +2,23 @@ package ch.ysdc.mahjongcalculator.calculation;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.util.Log;
 import ch.ysdc.mahjongcalculator.model.Tile;
 
-public class Calculator {
+public class CombinationManager {
 	
 	private static String TAG = "Calculator";
-	private LinkedList<Possibility> possibilities;
+	private List<Possibility> possibilities;
 	
 	/****************************************************************************
 	 * Constructor takes a tiles linked list as parameter
 	 * @param tiles the tiles used to find the possibilities
 	 ****************************************************************************/
-	public Calculator(){
-		possibilities = new LinkedList<Possibility>();
+	public CombinationManager(){
+		possibilities = new CopyOnWriteArrayList<Possibility>();
 	}
 
 	/****************************************************************************
@@ -25,21 +27,28 @@ public class Calculator {
 	 * @param tiles the tiles to use to calculate the possibilities
 	 * @return the different possibilities with different combination
 	 ****************************************************************************/
-	public LinkedList<Possibility> getPossibilities(LinkedList<Tile> tiles){
+	public List<Possibility> getPossibilities(LinkedList<Tile> tiles){
 		Possibility.resetCounter();
 		possibilities.add(new Possibility(tiles, null));
 		
 		Log.d(TAG, "Start Calculator");
-		Iterator<Possibility> itP = possibilities.iterator();
 		
-		while(itP.hasNext()){
-			Possibility possibility = itP.next();
-			Log.d(TAG, "Possibility: " + possibility + " (unused " + possibility.getUnusedTiles().size() + ")");
+		for(int i=0; i<possibilities.size(); i++){
+			Possibility possibility = possibilities.get(i);
+			Log.d(TAG, "possibilities (" + i + "/" + possibilities.size() + ")");
+			Log.d(TAG, "New possibility: " + possibility.getCombinations().size() + "." + possibility.getPair() + " (unused " + possibility.getUnusedTiles().size() + ")");
 			searchPossibility(possibility);
 		}
 		
 		Log.d(TAG, "Possibilities calculated: " + possibilities.size());
+
 		
+		for(Possibility p : possibilities){
+			Log.d(TAG, "Possibility " + p.getId() + " (" + p.isValid() + "," + p.getUnusedTiles() + (p.getPair() != null ? "paired" : "no pair"));
+			for(Combination c : p.getCombinations()){
+				Log.d(TAG, "* " + c);
+			}
+		}
 		return filterValidPossibilities();
 		
 	}
@@ -48,14 +57,17 @@ public class Calculator {
 	 * Remove the invalid possibilities
 	 * @return the filtered possibilities
 	 ***************************************************************************/
-	private LinkedList<Possibility> filterValidPossibilities() {		
+	private List<Possibility> filterValidPossibilities() {		
 		Log.d(TAG, "Filter possibilities");
 
 		Iterator<Possibility> it = possibilities.iterator();
 		while(it.hasNext()){
 			Possibility p = it.next();
-			if(!p.isValid()){
-				it.remove();
+			if((!p.isValid()) || (p.getCombinations().size()>4)){
+				possibilities.remove(p);
+			}
+			if(p.alreadyListed(possibilities)){
+				possibilities.remove(p);
 			}
 		}
 		Log.d(TAG, "Filtered possibilities calculated: " + possibilities.size());
@@ -67,45 +79,48 @@ public class Calculator {
 	 * @param possibility the possibility to analyze
 	 ***************************************************************************/
 	private void searchPossibility(Possibility possibility){
-
+		
 		while(possibility.getUnusedTiles().size() > 0){
-			Tile tile = possibility.getUnusedTiles().removeFirst();
+			Log.d(TAG, "* Current possibility: " + possibility.getCombinations().size() + "," + possibility.getPair() +  
+					   "\n* Tiles " + possibility.displayTiles());
 			
-			Log.d(TAG, "* tile: " + tile + " (stile " + possibility.getUnusedTiles().size() + ")");
+			Tile tile = possibility.getUnusedTiles().remove(0);
 			
-			LinkedList<Combination> combinations = searchCombination(tile,possibility.getUnusedTiles());
+			Log.d(TAG, "* tile (" + tile.getNo() + tile.getCategory() + tile.getId() + ")");
+			
+			List<Combination> combinations = searchCombination(tile,possibility.getUnusedTiles());
 			
 			switch(combinations.size()){
 			case 0:
-				if(possibility.getUnusedTiles().size()==1){
-					Tile lastTile = possibility.getUnusedTiles().getFirst();
-					if((lastTile.getCategory() == tile.getCategory()) && (lastTile.getNo() == tile.getNo())){
-						possibility.setPair(lastTile, tile);
-						Log.d(TAG, "* Possibility valid!");
-						return;
-					}
-				}
+//				if(possibility.getUnusedTiles().size()==1){
+//					Tile lastTile = possibility.getUnusedTiles().getFirst();
+//					if((lastTile.getCategory() == tile.getCategory()) && (lastTile.getNo() == tile.getNo())){
+//						possibility.setPair(lastTile, tile);
+//						Log.d(TAG, "* Possibility valid!");
+//						return;
+//					}
+//				}
 				possibility.setValid(false);
 				Log.d(TAG, "* Possibility invalid!");
 				return;
 			case 1:
 				Log.d(TAG, "* 1 combination");
 
-				if(combinations.getFirst().getTiles().size()==2){
+				if(combinations.get(0).getTiles().size()==2){
 					if(possibility.getPair()!= null){
 						possibility.setValid(false);
 						Log.d(TAG, "* Possibility invalid, second pair!");
 						return;
 					}
-					possibility.setPair(combinations.getFirst().getTiles().getFirst(), combinations.getFirst().getTiles().getLast());
+					possibility.setPair(combinations.get(0).getTiles().getFirst(), combinations.get(0).getTiles().getLast());
 				}else{
-					possibility.addCombinations(combinations.getFirst());
+					possibility.addCombinations(combinations.get(0));
 				}
-				clearTilesFromUnused(possibility,combinations.getFirst());
+				clearTilesFromUnused(possibility,combinations.get(0));
 				break;
 			default:
-				Log.d(TAG, "* many combination");
-				Combination firstCombination = combinations.removeFirst();
+				Log.d(TAG, "* many combinations");
+				Combination firstCombination = combinations.remove(0);
 				for(Combination c : combinations){
 					addPossibility(possibility,c);
 				}
@@ -122,7 +137,7 @@ public class Calculator {
 				clearTilesFromUnused(possibility,firstCombination);
 				break;
 			}
-			Log.d(TAG, "* End Tile Loop");
+			Log.d(TAG, "* End Tile Loop: (" + possibility.getCombinations().size() + "," + (possibility.getPair() != null ? "paired" : "unpaired")  + "," + possibility.getUnusedTiles().size() + ")");
 		}
 		
 	}
@@ -148,7 +163,7 @@ public class Calculator {
 			possibility.addCombinations(c);
 		}
 		clearTilesFromUnused(possibility,c);
-		possibilities.addLast(possibility);
+		possibilities.add(possibility);
 		
 	}
 	/****************************************************************************
@@ -161,7 +176,7 @@ public class Calculator {
 		Log.d(TAG, "## clearTilesFromUnused");
 		
 		//We don't take the first because it's the parent, who was already removed
-		for(int i=1; i<combination.getTiles().size(); i++){
+		for(int i=0; i<combination.getTiles().size(); i++){
 			Tile t = combination.getTiles().get(i);
 			if(!possibility.getUnusedTiles().remove(t)){
 				Log.d(TAG, "not found");
@@ -180,9 +195,9 @@ public class Calculator {
 	 * @param unusedTiles the list of available tiles to make a combination with.
 	 * @return the list of all possible combination
 	 ***************************************************************************/
-	private LinkedList<Combination> searchCombination(Tile tile, LinkedList<Tile> unusedTiles) {
+	private List<Combination> searchCombination(Tile tile, List<Tile> unusedTiles) {
 		
-		LinkedList<Combination> combinations = new LinkedList<Combination>();
+		List<Combination> combinations = new CopyOnWriteArrayList<Combination>();
 		Combination similar = new Combination(tile);
 		Tile[] bottomChow = new Tile[2];
 		Tile[] middleChow = new Tile[2];
@@ -193,6 +208,12 @@ public class Calculator {
 		while(it.hasNext()){
 			Tile utile = it.next();
 			Log.d(TAG, "** utile: " + utile.getImg() + ")");
+			
+
+			if(utile.getId()== tile.getId()){
+				Log.d(TAG, "** same tile");
+				continue;
+			}
 			
 			if(utile.getCategory() != tile.getCategory()){
 				Log.d(TAG, "** different category");
@@ -211,26 +232,34 @@ public class Calculator {
 					}
 					break;
 				case -1:
-					if(bottomChow[1] == null){
-						bottomChow[1] = utile;
-						Log.d(TAG, "** bottomChow found (" + utile.getNo() + ")");
-					}else if(middleChow[0] == null){
-						middleChow[0] = utile;
-						Log.d(TAG, "** middleChow found (" + utile.getNo() + ")");
-					}
+					Log.d(TAG, "** bottomChow found (" + utile.getNo() + ")");
+					bottomChow[1] = utile;
+					Log.d(TAG, "** middleChow found (" + utile.getNo() + ")");
+					middleChow[0] = utile;
+//					if(bottomChow[1] == null){
+//						bottomChow[1] = utile;
+//						Log.d(TAG, "** bottomChow found (" + utile.getNo() + ")");
+//					}else if(middleChow[0] == null){
+//						middleChow[0] = utile;
+//						Log.d(TAG, "** middleChow found (" + utile.getNo() + ")");
+//					}
 					break;
 				case 0:
 					similar.addTile(utile);
 					Log.d(TAG, "** Similar found (" + utile.getNo() + "," + utile.getCategory() + ")");
 					break;
 				case 1:
-					if(topChow[0] == null){
-						topChow[0] = utile;
-						Log.d(TAG, "** topChow found (" + utile.getNo() + ")");
-					}else if(middleChow[1] == null){
-						middleChow[1] = utile;
-						Log.d(TAG, "** middleChow found (" + utile.getNo() + ")");
-					}
+					Log.d(TAG, "** topChow found (" + utile.getNo() + ")");
+					topChow[0] = utile;
+					Log.d(TAG, "** middleChow found (" + utile.getNo() + ")");
+					middleChow[1] = utile;
+//					if(topChow[0] == null){
+//						topChow[0] = utile;
+//						Log.d(TAG, "** topChow found (" + utile.getNo() + ")");
+//					}else if(middleChow[1] == null){
+//						middleChow[1] = utile;
+//						Log.d(TAG, "** middleChow found (" + utile.getNo() + ")");
+//					}
 					break;
 				case 2:
 					if(topChow[1] == null){
@@ -246,31 +275,43 @@ public class Calculator {
 		if((bottomChow[0]!=null) && (bottomChow[1]!=null)){
 			Combination c = new Combination(tile);
 			c.addTiles(bottomChow);
+			c.setType(Combination.Type.CHOW);
+			c.setRepresentation();
 			combinations.add(c);
 			Log.d(TAG, "** topChow confirmed (" + bottomChow[0].getNo() + bottomChow[1].getNo() + tile.getNo() + ")");
 		}
 		if((middleChow[0]!=null) && (middleChow[1]!=null)){
 			Combination c = new Combination(tile);
 			c.addTiles(middleChow);
+			c.setType(Combination.Type.CHOW);
+			c.setRepresentation();
 			combinations.add(c);
 			Log.d(TAG, "** middleChow confirmed (" + middleChow[0].getNo() + tile.getNo() + middleChow[1].getNo() + ")");
 		}
 		if((topChow[0]!=null) && (topChow[1]!=null)){
 			Combination c = new Combination(tile);
 			c.addTiles(topChow);
+			c.setType(Combination.Type.CHOW);
+			c.setRepresentation();
 			combinations.add(c);
 			Log.d(TAG, "** topChow confirmed (" + tile.getNo()+ topChow[0].getNo()  + topChow[1].getNo() + ")");
 		}
 		switch(similar.getTiles().size()){
 			case 2:
+				similar.setType(Combination.Type.PAIR);
+				similar.setRepresentation();
 				combinations.add(similar);
 				Log.d(TAG, "** pair confirmed");
 				break;
 			case 3:
+				similar.setType(Combination.Type.PONG);
+				similar.setRepresentation();
 				combinations.add(similar);
 				Log.d(TAG, "** pong confirmed");
 				break;
 			case 4:
+				similar.setType(Combination.Type.KONG);
+				similar.setRepresentation();
 				combinations.add(similar);
 				Combination c = new Combination(tile);
 				for(Tile t : similar.getTiles()){

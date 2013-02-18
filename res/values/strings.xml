@@ -62,11 +62,22 @@
     <string name="action.delete">Delete</string>
     <string name="option.back">Back</string>
     <string name="option.next">Next</string>
+    <string name="option.previous">Previous</string>
     <string name="option.settings">Settings</string>
     <string name="option.load">Load</string>
     <string name="option.save">Save</string>
     <string name="option.about">About</string>
     <string name="option.exit">Exit</string>
     <string name="error.invalid.tiles">Unable to find a valid mahjong. Please check your tiles</string>
-
+    <string name="game.lasttile.title">Winning tile</string>
+    <string name="game.lasttile.wall">Winning tile taken from wall</string>
+    <string name="game.wind.title">Player wind</string>
+    <string name="game.last.title">Mah Jong with</string>
+    <string name="game.last.normal">Game tile(default)</string>
+    <string name="game.last.wall">Last tile from the wall</string>
+    <string name="game.last.kong">Tile from exposed Kong</string>
+    <string name="game.last.detached">Tile from detached wall</string>
+    <string name="game.flower.title">Player flowers</string>
+    <string name="game.season.title">Player Seasons</string>
+    <string name="game.player.tiles">Player Combinations</string>
 </resources>

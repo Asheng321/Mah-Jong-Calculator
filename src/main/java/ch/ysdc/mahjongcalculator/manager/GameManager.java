@@ -40,21 +40,19 @@ public class GameManager {
 	public static LinkedList<Tile> createTiles(
 			HashMap<String, Integer> playerTiles, boolean isVisible) {
 		Log.d(TAG, "createTiles");
+		
 		LinkedList<Tile> tiles = new LinkedList<Tile>();
 		Pattern pattern = Pattern.compile(TILE_IMG_REGEX);
 
 		// Loop through the hidden tiles
 		for (Map.Entry<String, Integer> entry : playerTiles.entrySet()) {
-			Log.d(TAG, "tile " + entry.getKey());
+
 			for (int i = 0; i < entry.getValue(); i++) {
 				Matcher matcher = pattern.matcher(entry.getKey());
-
-				Log.d(TAG, "i: " + "(" + entry.getValue() + ")");
 
 				if (matcher.matches()) {
 					// Exception if we can't parse correctly the tile image name
 					if (matcher.groupCount() != 3) {
-						Log.e(TAG, "Wrong image name " + entry.getKey());
 						throw new RuntimeException("Wrong image name "
 								+ entry.getKey());
 					}
@@ -69,7 +67,6 @@ public class GameManager {
 			}
 		}
 
-		Log.d(TAG, "createTiles end: " + tiles.size());
 		return tiles;
 	}
 	// public static Game initializeGame(Game game) {

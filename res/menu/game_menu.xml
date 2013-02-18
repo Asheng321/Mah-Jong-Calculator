@@ -2,21 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/main_option_settings"
+        android:id="@+id/game_option_previous"
+        android:icon="@drawable/next"
+        android:showAsAction="always|withText"
+        android:title="@string/option.previous"/>
+    <item
+        android:id="@+id/game_option_settings"
         android:icon="@drawable/settings"
         android:showAsAction="always|withText"
         android:title="@string/option.settings"/>
     <item
-        android:id="@+id/main_option_next"
+        android:id="@+id/game_option_next"
         android:icon="@drawable/next"
         android:showAsAction="always|withText"
         android:title="@string/option.next"/>
     <item
-        android:id="@+id/main_option_about"
+        android:id="@+id/game_option_about"
         android:showAsAction="never|withText"
         android:title="@string/option.about"/>
     <item
-        android:id="@+id/main_option_exit"
+        android:id="@+id/game_option_exit"
         android:showAsAction="never|withText"
         android:title="@string/option.exit"/>
 </menu>

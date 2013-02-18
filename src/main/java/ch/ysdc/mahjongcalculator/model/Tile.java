@@ -6,6 +6,9 @@ package ch.ysdc.mahjongcalculator.model;
 
 import java.util.regex.Pattern;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -14,8 +17,9 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author djohannot
  */
 @DatabaseTable
-public class Tile {
+public class Tile implements Comparable<Tile>, Parcelable{
 
+	private static int counter = 0;
     public static final String ID_FIELD_NAME = "id";
     public static final String NO_FIELD_NAME = "no";
     public static final String IMG_FIELD_NAME = "img";
@@ -42,10 +46,12 @@ public class Tile {
     
     public Tile(){
         super();
+        this.id = counter++;
     }
     
     public Tile(int n, String i, Category c){
     	super();
+    	this.id = counter++;
         this.no = n;
         this.img = i;
         this.category = c;
@@ -53,6 +59,7 @@ public class Tile {
     }
     public Tile(String n, String i, Category c){
     	super();
+        this.id = counter++;
     	if (Pattern.matches("[0-9]{1}",n)) {
     		this.no = Integer.valueOf(n);
     	}else{
@@ -62,6 +69,22 @@ public class Tile {
         this.category = c;
         this.isVisible = false;
     }
+
+	public Tile(Parcel in) {
+		id = in.readInt();
+		no = in.readInt();
+		img = in.readString();
+		isVisible = Boolean.parseBoolean(in.readString());
+		category = Category.fromValue(in.readString());
+	}
+
+	/*****************************************
+	STATIC COUNTER ACCESSOR
+	*****************************************/
+	public static void resetCounter(){
+		counter = 0;
+	}
+	
     public int getId() {
         return id;
     }
@@ -123,11 +146,18 @@ public class Tile {
     public String toString() {
         return "Tile (" + id + ") " + no + category + " " + (isVisible ? "Hidden" : "Hand" + " #" + (hand!=null?"handy":"-"));
     }
-    
-    @Override
+
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result
+				+ ((category == null) ? 0 : category.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((img == null) ? 0 : img.hashCode());
+		result = prime * result
+				+ ((isVisible == null) ? 0 : isVisible.hashCode());
 		result = prime * result + no;
 		return result;
 	}
@@ -141,10 +171,25 @@ public class Tile {
 		if (getClass() != obj.getClass())
 			return false;
 		Tile other = (Tile) obj;
+		if (category != other.category)
+			return false;
+		if (id != other.id)
+			return false;
+		if (img == null) {
+			if (other.img != null)
+				return false;
+		} else if (!img.equals(other.img))
+			return false;
+		if (isVisible == null) {
+			if (other.isVisible != null)
+				return false;
+		} else if (!isVisible.equals(other.isVisible))
+			return false;
 		if (no != other.no)
 			return false;
 		return true;
 	}
+
 
 	public enum Category {
 
@@ -179,4 +224,34 @@ public class Tile {
           throw new IllegalArgumentException("No constant with value " + v + " found");
         }
 	}
+
+
+	@Override
+	public int compareTo(Tile t) {
+		return this.img.compareTo(t.img);
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeInt(id);
+		out.writeInt(no);
+		out.writeString(img);
+		out.writeString(isVisible.toString());
+		out.writeString(category.value);
+	}
+	public static final Parcelable.Creator<Tile> CREATOR = new Parcelable.Creator<Tile>() {
+        public Tile createFromParcel(Parcel in) {
+            return new Tile(in);
+        }
+
+        public Tile[] newArray(int size) {
+            return new Tile[size];
+        }
+    };
 }
