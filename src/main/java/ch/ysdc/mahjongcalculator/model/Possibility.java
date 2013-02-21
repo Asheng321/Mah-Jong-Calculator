@@ -1,5 +1,6 @@
 package ch.ysdc.mahjongcalculator.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -8,7 +9,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-public class Possibility implements Parcelable {
+public class Possibility implements Parcelable, Serializable {
+
+
+	private static final long serialVersionUID = 7620094326864403955L;
+
 	private static String TAG = "Possibility";
 	
 	private static int counter = 0;
@@ -34,8 +39,7 @@ public class Possibility implements Parcelable {
 	
 	public Possibility(List<Tile> t, List<Combination> c){
 		id = counter++;
-		validity = Validity.VALID;
-		
+		validity = Validity.VALID;	
 		pair = null;
 		unusedTiles = (t != null ? new CopyOnWriteArrayList<Tile>(t) : new CopyOnWriteArrayList<Tile>());
 		combinations = (c != null ? new CopyOnWriteArrayList<Combination>(c) : new CopyOnWriteArrayList<Combination>());
@@ -50,6 +54,8 @@ public class Possibility implements Parcelable {
 		combinations = new LinkedList<Combination>();
 		in.readTypedList(combinations, Combination.CREATOR);
 		unusedTileCombination = in.readParcelable(Combination.class.getClassLoader());
+		unusedTiles = new LinkedList<Tile>();
+		in.readTypedList(unusedTiles, Tile.CREATOR);
 	}
 
 	/*****************************************
@@ -155,29 +161,31 @@ public class Possibility implements Parcelable {
 		
 		//Compare with all possibilities
 		for(Possibility p : possibilities){
-			Log.d(TAG, "Compare possibility " + p.getId());
+
 			if(p.getId()==getId()){
 				Log.d(TAG, "Same ID");
 				continue;
 			}
+			List<Combination> cpList = new CopyOnWriteArrayList<Combination>(p.getCombinations());
 			
 			boolean samePossibility = true;
 			//Loop through all combination
-			for(Combination c : getCombinations()){
+			for(Combination c : this.getCombinations()){
 				boolean sameCombination = false;
-				
+
 				//for each combination of the possibility
-				for(Combination cp : p.getCombinations()){
+				for(Combination cp : cpList){
+
 					//if it's the same combination
-					if((c.getRepresentation().equals(cp.getRepresentation())) && (c.getType() == cp.getType())){
+					if((c.getType() == cp.getType()) && (c.getRepresentation().equals(cp.getRepresentation()))){
 						//We leave the combination loop
 						sameCombination = true;
+						cpList.remove(cp);
 						break;
 					}
 				}
 				//If the combination was
 				if(!sameCombination){
-					Log.d(TAG, "unfound combo: " +c.getRepresentation());
 					//We set the possibility as a different
 					samePossibility = false;
 					//we leave the combination loop
@@ -186,7 +194,6 @@ public class Possibility implements Parcelable {
 				
 			}
 			if(samePossibility && (this.samePair(p.getPair()))){
-				Log.d(TAG, "samePossibility found");
 				return true;
 			}
 		}
@@ -224,6 +231,7 @@ public class Possibility implements Parcelable {
 		out.writeParcelable(pair, flag);
 		out.writeTypedList(combinations);
 		out.writeParcelable(unusedTileCombination, flag);
+		out.writeTypedList(unusedTiles);
 	}
 	public static final Parcelable.Creator<Possibility> CREATOR = new Parcelable.Creator<Possibility>() {
         public Possibility createFromParcel(Parcel in) {

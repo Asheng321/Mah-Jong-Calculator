@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -435,7 +436,7 @@ public class MainActivity extends SherlockActivity implements
 	    				mHandler.sendMessage(msg);
 	    				//open new game activity
 	    				Intent intent3 = new Intent(GameActivity.ACTION_GAME);
-	    				intent3.putExtra(POSSIBILITY, possibilities.get(0));
+	    				intent3.putExtra(POSSIBILITY, (Parcelable)possibilities.get(0));
 	    				startActivity(intent3);
 						break;
 					default:

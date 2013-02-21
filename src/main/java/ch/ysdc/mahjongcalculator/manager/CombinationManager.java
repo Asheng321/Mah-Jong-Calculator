@@ -154,7 +154,9 @@ public class CombinationManager {
 			}
 			Log.d(TAG, "* End Tile Loop: (" + possibility.getCombinations().size() + "," + (possibility.getPair() != null ? "paired" : "unpaired")  + "," + possibility.getUnusedTiles().size() + ")");
 		}
-		
+
+		possibility.getUnusedTileCombination().setType(Combination.Type.NONE);
+		possibility.getUnusedTileCombination().setRepresentation();
 		if(isWinningPossibility(possibility)){
 			this.hasValidMahjong = true;
 		}

@@ -2,18 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-     <HorizontalScrollView
-                android:id="@+id/possibility.cell.scroll"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/possibilities.selection"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:contentDescription="@null"
+        android:onClick="rowSelected"
+        android:padding="10dp"
+        android:src="@drawable/nonselected"
+        android:tag="" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical" >
+
+        <HorizontalScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
+
             <LinearLayout
-                android:id="@+id/possibility.cell.layout"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/possibilities.player.open.tiles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45dp"
-                android:orientation="horizontal" >
+                android:minHeight="40dp"
+                android:orientation="horizontal"
+                android:padding="2dp" >
             </LinearLayout>
         </HorizontalScrollView>
+
+        <HorizontalScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/possibilities.player.hidden.tiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
 
 </LinearLayout>

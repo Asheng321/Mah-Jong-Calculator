@@ -33,11 +33,22 @@ public class PossibilityArrayAdapter extends ArrayAdapter<Possibility>{
 	    LayoutInflater inflater = (LayoutInflater) context
 	        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    View rowView = inflater.inflate(R.layout.possibilitycell, parent, false);
-	    LinearLayout layout = (LinearLayout) rowView.findViewById(R.id.possibility_cell_layout);
 
 	    for(Combination c : values[position].getCombinations()){
-	    	addCombination(c, layout);
+	    	addCombination(c, rowView);
 	    }
+	    if(values[position].getPair()!=null){
+	    	addCombination(values[position].getPair(), rowView);
+	    }
+	    if(values[position].getUnusedTileCombination()!=null){
+	    	addCombination(values[position].getUnusedTileCombination(), rowView);
+	    }
+
+
+		//Set the tag of the selection icon
+		ImageButton selection = (ImageButton)rowView.findViewById(R.id.possibilities_selection);
+		selection.setTag(position);
+		rowView.setTag(position);
 
 	    return rowView;
 	  }
@@ -50,7 +61,7 @@ public class PossibilityArrayAdapter extends ArrayAdapter<Possibility>{
 		 *            true if the tile must be add to the hidden list
 		 ****************************************************************************/
 		@SuppressWarnings("deprecation")
-		private void addCombination(Combination combination, LinearLayout parent) {
+		private void addCombination(Combination combination, View rowView) {
 			Log.d(TAG, "addCombination");
 			LinearLayout.LayoutParams paramsLO = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -80,9 +91,13 @@ public class PossibilityArrayAdapter extends ArrayAdapter<Possibility>{
 					imgButton.setBackground(null);
 				}
 				imgButton.setId(tile.getId());
+				
+				// Get the player layout
+				LinearLayout playerLayout = (LinearLayout) (tile.getIsVisible() ? rowView.findViewById(R.id.possibilities_player_open_tiles)
+						: rowView.findViewById(R.id.possibilities_player_hidden_tiles));
 
 				// Add the tile button to the player list
-				parent.addView(imgButton, paramsLO);
+				playerLayout.addView(imgButton, paramsLO);
 			}
 		}
 	} 
