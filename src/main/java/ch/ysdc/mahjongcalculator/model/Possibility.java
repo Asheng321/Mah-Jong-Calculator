@@ -1,6 +1,5 @@
-package ch.ysdc.mahjongcalculator.calculation;
+package ch.ysdc.mahjongcalculator.model;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -8,47 +7,49 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-import ch.ysdc.mahjongcalculator.model.Combination;
-import ch.ysdc.mahjongcalculator.model.Tile;
 
 public class Possibility implements Parcelable {
 	private static String TAG = "Possibility";
 	
 	private static int counter = 0;
 	private int id;
-	private boolean isValid;
+	private Validity validity;
 	private List<Tile> unusedTiles;
 	private List<Combination> combinations;
+	private Combination unusedTileCombination;
 	private Combination pair;
 	
 
 	/*****************************************
 	CONSTRUCTOR
 	*****************************************/
-	Possibility(Possibility p){
+	public Possibility(Possibility p){
 		id = counter++;
-		isValid = p.isValid;
+		validity = p.validity;
 		unusedTiles = new CopyOnWriteArrayList<Tile>(p.unusedTiles);
 		combinations =  new CopyOnWriteArrayList<Combination>(p.combinations);
+		unusedTileCombination = new Combination(p.unusedTileCombination);
 		pair =  p.getPair();
 	}
 	
-	Possibility(List<Tile> t, List<Combination> c){
+	public Possibility(List<Tile> t, List<Combination> c){
 		id = counter++;
-		isValid = true;
+		validity = Validity.VALID;
 		
 		pair = null;
 		unusedTiles = (t != null ? new CopyOnWriteArrayList<Tile>(t) : new CopyOnWriteArrayList<Tile>());
 		combinations = (c != null ? new CopyOnWriteArrayList<Combination>(c) : new CopyOnWriteArrayList<Combination>());
+		unusedTileCombination = new Combination();
 	}
 
 	public Possibility(Parcel in) {
 		id = in.readInt();
-		isValid = Boolean.valueOf(in.readString());
+		validity = in.readParcelable(Validity.class.getClassLoader());
 		pair = in.readParcelable(Combination.class.getClassLoader());
 
 		combinations = new LinkedList<Combination>();
 		in.readTypedList(combinations, Combination.CREATOR);
+		unusedTileCombination = in.readParcelable(Combination.class.getClassLoader());
 	}
 
 	/*****************************************
@@ -74,17 +75,26 @@ public class Possibility implements Parcelable {
 	/*****************************************
 	GETTER AND SETTER 
 	*****************************************/
-
-	public boolean isValid() {
-		return isValid;
-	}
-
-	public void setValid(boolean isValid) {
-		this.isValid = isValid;
-	}
+	
 	
 	public List<Tile> getUnusedTiles() {
 		return unusedTiles;
+	}
+
+	public Combination getUnusedTileCombination() {
+		return unusedTileCombination;
+	}
+
+	public void setUnusedTileCombination(Combination unusedTileCombination) {
+		this.unusedTileCombination = unusedTileCombination;
+	}
+
+	public Validity getValidity() {
+		return validity;
+	}
+
+	public void setValidity(Validity validity) {
+		this.validity = validity;
 	}
 
 	public void setUnusedTiles(List<Tile> unusedTiles) {
@@ -113,6 +123,14 @@ public class Possibility implements Parcelable {
 
 	public void setPair(Combination pair) {
 		this.pair = pair;
+	}
+
+	public static int getCounter() {
+		return counter;
+	}
+
+	public static void setCounter(int counter) {
+		Possibility.counter = counter;
 	}
 
 	/*****************************************
@@ -176,6 +194,14 @@ public class Possibility implements Parcelable {
 	}
 
 	public boolean samePair(Combination pair2) {
+		if(pair == null){
+			if(pair2 == null){
+				return true;
+			}
+			return false;
+		}else if(pair2 == null){
+			return false;
+		}
 		// TODO Auto-generated method stub
 		if((pair.getRepresentation().equals(pair2.getRepresentation())) && (pair.getType() == pair2.getType())){
 			//We leave the combination loop
@@ -194,9 +220,10 @@ public class Possibility implements Parcelable {
 	public void writeToParcel(Parcel out, int flag) {
 		// TODO Auto-generated method stub
 		out.writeInt(id);
-		out.writeString(String.valueOf(isValid));
+		out.writeParcelable(validity, flag);
 		out.writeParcelable(pair, flag);
 		out.writeTypedList(combinations);
+		out.writeParcelable(unusedTileCombination, flag);
 	}
 	public static final Parcelable.Creator<Possibility> CREATOR = new Parcelable.Creator<Possibility>() {
         public Possibility createFromParcel(Parcel in) {
@@ -207,4 +234,6 @@ public class Possibility implements Parcelable {
             return new Possibility[size];
         }
     };
+	
+	
 }

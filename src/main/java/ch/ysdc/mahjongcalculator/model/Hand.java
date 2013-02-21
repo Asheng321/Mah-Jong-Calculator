@@ -10,7 +10,6 @@ import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import ch.ysdc.mahjongcalculator.calculation.Possibility;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -27,12 +26,15 @@ public class Hand implements Parcelable, Serializable{
 	private static final long serialVersionUID = 362476378791796419L;
 	public static final String ID_FIELD_NAME = "id";
     public static final String NAME_FIELD_NAME = "name";
+    public static final String VALIDITY_FIELD_NAME = "validity";
     public static final String COMBO_FIELD_NAME = "combinations";
     
     @DatabaseField(generatedId = true, columnName = ID_FIELD_NAME)
     private int id;
     @DatabaseField(columnName = NAME_FIELD_NAME)
     private String name;
+    @DatabaseField(columnName = VALIDITY_FIELD_NAME)
+    private Validity validity;
     @ForeignCollectionField(columnName = COMBO_FIELD_NAME)
     private ForeignCollection<Combination> storedCombinations;
 
@@ -41,11 +43,13 @@ public class Hand implements Parcelable, Serializable{
     public Hand(){
     	super();
     	combinations = new LinkedList<Combination>();
+    	validity = Validity.VALID;
     }
     public Hand(String name) {
 		super();
 		this.name = name;
     	combinations = new LinkedList<Combination>();
+    	validity = Validity.VALID;
 	}
 
 	public Hand(Parcel in) {
@@ -53,10 +57,13 @@ public class Hand implements Parcelable, Serializable{
 		name = in.readString();
 		combinations = new LinkedList<Combination>();
 		in.readTypedList(combinations, Combination.CREATOR);
+		validity = in.readParcelable(Validity.class.getClassLoader());
 	}
 	public Hand(Possibility possibility) {
+		validity = possibility.getValidity();
 		combinations = possibility.getCombinations();
 		combinations.add(possibility.getPair());
+		combinations.add(possibility.getUnusedTileCombination());
 	}
 	public int getId() {
         return id;
@@ -74,8 +81,13 @@ public class Hand implements Parcelable, Serializable{
 		this.name = name;
 	}
 	
-	
-    public ForeignCollection<Combination> getStoredCombinations() {
+    public Validity getValidity() {
+		return validity;
+	}
+	public void setValidity(Validity validity) {
+		this.validity = validity;
+	}
+	public ForeignCollection<Combination> getStoredCombinations() {
 		return storedCombinations;
 	}
 	public void setStoredCombinations(
@@ -101,6 +113,7 @@ public class Hand implements Parcelable, Serializable{
 		out.writeInt(id);
 		out.writeString(name);
 		out.writeTypedList(combinations);
+		out.writeParcelable(validity, flags);
 	}
 	
 	public static final Parcelable.Creator<Hand> CREATOR = new Parcelable.Creator<Hand>() {

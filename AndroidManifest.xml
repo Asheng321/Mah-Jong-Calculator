@@ -48,10 +48,15 @@
         <activity
             android:name="ch.ysdc.mahjongcalculator.PossibilitiesActivity"
             android:label="@string/possibilities.title"
+            android:exported="false"
             android:parentActivityName="ch.ysdc.mahjongcalculator.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.ysdc.mahjongcalculator.MainActivity" />
+		  <intent-filter>
+		     <action android:name="ch.ysdc.mahjongcalculator.action.MULTI" />
+		     <category android:name="android.intent.category.DEFAULT" />
+		  </intent-filter>
         </activity>
     </application>
 

@@ -9,10 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import ch.ysdc.mahjongcalculator.calculation.Possibility;
 import ch.ysdc.mahjongcalculator.manager.FileManager;
 import ch.ysdc.mahjongcalculator.model.Combination;
 import ch.ysdc.mahjongcalculator.model.Hand;
+import ch.ysdc.mahjongcalculator.model.Possibility;
 import ch.ysdc.mahjongcalculator.model.Tile;
 import ch.ysdc.mahjongcalculator.utils.AndroidUtils;
 

@@ -1,4 +1,4 @@
-package ch.ysdc.mahjongcalculator.calculation;
+package ch.ysdc.mahjongcalculator.manager;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -7,12 +7,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.util.Log;
 import ch.ysdc.mahjongcalculator.model.Combination;
+import ch.ysdc.mahjongcalculator.model.Combination.Type;
+import ch.ysdc.mahjongcalculator.model.Possibility;
 import ch.ysdc.mahjongcalculator.model.Tile;
+import ch.ysdc.mahjongcalculator.model.Validity;
 
 public class CombinationManager {
 	
 	private static String TAG = "Calculator";
 	private List<Possibility> possibilities;
+	private boolean hasValidMahjong;
 	
 	/****************************************************************************
 	 * Constructor takes a tiles linked list as parameter
@@ -29,6 +33,8 @@ public class CombinationManager {
 	 * @return the different possibilities with different combination
 	 ****************************************************************************/
 	public List<Possibility> getPossibilities(LinkedList<Tile> tiles){
+		hasValidMahjong = false;
+		
 		Possibility.resetCounter();
 		possibilities.add(new Possibility(tiles, null));
 		
@@ -45,7 +51,7 @@ public class CombinationManager {
 
 		
 		for(Possibility p : possibilities){
-			Log.d(TAG, "Possibility " + p.getId() + " (" + p.isValid() + "," + p.getUnusedTiles() + (p.getPair() != null ? "paired" : "no pair"));
+			Log.d(TAG, "Possibility " + p.getId() + " (" + p.getValidity() + "," + p.getUnusedTiles() + (p.getPair() != null ? "paired" : "no pair"));
 			for(Combination c : p.getCombinations()){
 				Log.d(TAG, "* " + c);
 			}
@@ -59,15 +65,19 @@ public class CombinationManager {
 	 * @return the filtered possibilities
 	 ***************************************************************************/
 	private List<Possibility> filterValidPossibilities() {		
-		Log.d(TAG, "Filter possibilities");
+		Log.d(TAG, "Filter possibilities. mahjong? " + this.hasValidMahjong);
 
 		Iterator<Possibility> it = possibilities.iterator();
 		while(it.hasNext()){
 			Possibility p = it.next();
-			if((!p.isValid()) || (p.getCombinations().size()>4)){
-				possibilities.remove(p);
+
+			if (p.getCombinations().size()>4){
+				p.setValidity(Validity.INVALID);
 			}
-			if(p.alreadyListed(possibilities)){
+			
+			if((hasValidMahjong && (p.getValidity() != Validity.MAHJONG)) ||
+					(p.getValidity() == Validity.ERROR) ||
+					(p.alreadyListed(possibilities))){
 				possibilities.remove(p);
 			}
 		}
@@ -93,27 +103,31 @@ public class CombinationManager {
 			
 			switch(combinations.size()){
 			case 0:
-//				if(possibility.getUnusedTiles().size()==1){
-//					Tile lastTile = possibility.getUnusedTiles().getFirst();
-//					if((lastTile.getCategory() == tile.getCategory()) && (lastTile.getNo() == tile.getNo())){
-//						possibility.setPair(lastTile, tile);
-//						Log.d(TAG, "* Possibility valid!");
-//						return;
-//					}
-//				}
-				possibility.setValid(false);
-				Log.d(TAG, "* Possibility invalid!");
-				return;
+				//TODO
+				if(tile.getIsVisible()){
+					//set validity of the possibility to error
+					Log.d(TAG, "* Possibility invalid!");
+					possibility.setValidity(Validity.ERROR);
+					//stop the loop
+					return;
+				}
+				//set validity of the possibility to invalid
+				possibility.setValidity(Validity.INCOMPLETE);
+				//Add the tile to the special combination (unusableTile)
+				possibility.getUnusedTileCombination().addTile(tile);
+				//remove it from the list of unusedTiles
+				possibility.getUnusedTiles().remove(tile);
+				break;
 			case 1:
 				Log.d(TAG, "* 1 combination");
 
-				if(combinations.get(0).getTiles().size()==2){
-					if(possibility.getPair()!= null){
-						possibility.setValid(false);
-						Log.d(TAG, "* Possibility invalid, second pair!");
-						return;
+				if(combinations.get(0).getType() == Type.PAIR){
+					if(possibility.getPair()== null){
+						possibility.setPair(combinations.get(0));
+					}else{
+						possibility.setValidity(Validity.INVALID);
+						possibility.addCombinations(combinations.get(0));
 					}
-					possibility.setPair(combinations.get(0));
 				}else{
 					possibility.addCombinations(combinations.get(0));
 				}
@@ -125,13 +139,13 @@ public class CombinationManager {
 				for(Combination c : combinations){
 					addPossibility(possibility,c);
 				}
-				if(firstCombination.getTiles().size()==2){
-					if(possibility.getPair()!= null){
-						possibility.setValid(false);
-						Log.d(TAG, "* Possibility invalid, second pair!");
-						return;
+				if(firstCombination.getType() == Type.PAIR){
+					if(possibility.getPair()== null){
+						possibility.setPair(firstCombination);
+					}else{
+						possibility.setValidity(Validity.INVALID);
+						possibility.addCombinations(firstCombination);
 					}
-					possibility.setPair(firstCombination);
 				}else{
 					possibility.addCombinations(firstCombination);
 				}
@@ -141,7 +155,19 @@ public class CombinationManager {
 			Log.d(TAG, "* End Tile Loop: (" + possibility.getCombinations().size() + "," + (possibility.getPair() != null ? "paired" : "unpaired")  + "," + possibility.getUnusedTiles().size() + ")");
 		}
 		
+		if(isWinningPossibility(possibility)){
+			this.hasValidMahjong = true;
+		}
 	}
+	
+	private boolean isWinningPossibility(Possibility possibility) {
+		if(possibility.getValidity() == Validity.VALID){
+			possibility.setValidity(Validity.MAHJONG);
+			return true;
+		}
+		return false;
+	}
+
 	/****************************************************************************
 	 * Add a new possibility to the list by copying another possibility and by 
 	 * adding a possibility to it.
@@ -153,13 +179,14 @@ public class CombinationManager {
 		Log.d(TAG, "*** addPossibility");
 		Possibility possibility = new Possibility(oldPossibility);
 
-		if(c.getTiles().size()==2){
-			if(possibility.getPair()!= null){
-				possibility.setValid(false);
-				Log.d(TAG, "* Possibility invalid, second pair!");
-				return;
+		
+		if(c.getType() == Type.PAIR){
+			if(possibility.getPair()== null){
+				possibility.setPair(c);
+			}else{
+				possibility.setValidity(Validity.INVALID);
+				possibility.addCombinations(c);
 			}
-			possibility.setPair(c);
 		}else{
 			possibility.addCombinations(c);
 		}

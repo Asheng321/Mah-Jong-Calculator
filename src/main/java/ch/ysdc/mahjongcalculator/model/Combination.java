@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -37,6 +38,27 @@ public class Combination implements Parcelable,Serializable{
     private Hand hand;
 
 	private List<Tile> tiles;
+
+	public Combination(){
+		tiles = new LinkedList<Tile>();
+	}
+	public Combination(Combination c){
+		if(c != null){
+			this.id = c.id;
+			this.type = c.type;
+			if(c.representation != null){
+				this.representation = new String();
+			}
+			this.hand = c.hand;
+			if(c.tiles != null){
+				this.tiles = new CopyOnWriteArrayList<Tile>(c.tiles);
+			}else{
+				this.tiles = new LinkedList<Tile>();
+			}
+		}else{
+			this.tiles = new LinkedList<Tile>();
+		}
+	}
 	
 	public Combination(Tile t){
 		tiles = new LinkedList<Tile>();
@@ -140,6 +162,14 @@ public class Combination implements Parcelable,Serializable{
 			}
 			this.representation += list2.get(0).getCategory() + (list2.get(0).getIsVisible() ? "v" : "h");
 			break;
+		case NONE:
+			this.representation = new String();
+			List<Tile> list3 = new ArrayList<Tile>(tiles);
+			Collections.sort(list3);
+			for(Tile t : list3){
+				this.representation += t.getNo() + "" + t.getCategory();
+			}
+			break;
 		default:
 			this.representation = new String();
 			break;
@@ -150,7 +180,8 @@ public class Combination implements Parcelable,Serializable{
         PONG,
         CHOW,
         KONG,
-        PAIR;
+        PAIR,
+        NONE;
 
         public static final Parcelable.Creator<Type> CREATOR = new Parcelable.Creator<Type>() {
         	   

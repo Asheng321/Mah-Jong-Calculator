@@ -26,11 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import ch.ysdc.mahjongcalculator.calculation.CombinationManager;
-import ch.ysdc.mahjongcalculator.calculation.Possibility;
+import ch.ysdc.mahjongcalculator.manager.CombinationManager;
 import ch.ysdc.mahjongcalculator.manager.DatabaseManager;
 import ch.ysdc.mahjongcalculator.manager.FileManager;
 import ch.ysdc.mahjongcalculator.manager.GameManager;
+import ch.ysdc.mahjongcalculator.model.Possibility;
 import ch.ysdc.mahjongcalculator.model.Tile;
 import ch.ysdc.mahjongcalculator.utils.AndroidUtils;
 import ch.ysdc.mahjongcalculator.utils.Constants;
@@ -51,6 +51,7 @@ public class MainActivity extends SherlockActivity implements
 	public static final int MSG_INFO = 3;
 
     public static final String POSSIBILITY = "ch.ysdc.mahjongcalculator.POSSIBILITY";
+    public static final String POSSIBILITIES = "ch.ysdc.mahjongcalculator.POSSIBILITIES";
 	public static final String OPEN_TILES_FILENAME = "ch.ysdc.mahjongcalculator.OPENPLAYERTILES";
 	public static final String HIDDEN_TILES_FILENAME = "ch.ysdc.mahjongcalculator.HIDDENPLAYERTILES";
 
@@ -102,63 +103,8 @@ public class MainActivity extends SherlockActivity implements
 		// Init the DB
 		DatabaseManager.init(this);
 
-		// playerHand = DatabaseManager.getInstance().createHand(new Hand());
-		// Log.d(TAG, "playerHand: " + playerHand);
-
 		firstRunPreferences();
-		// if (getFirstRun()) {
-		// Log.d(TAG, "onCreate: it's the first run");
-		// createGame();
-		// Log.d(TAG, "onCreate: init done");
-		// } else {
-		// List<Game> games = DatabaseManager.getInstance().getCurrentGame();
-		//
-		// switch(games.size()){
-		// case 0:
-		// createGame();
-		// break;
-		// case 1:
-		// currentGame = games.get(0);
-		// loadCurrentGame();
-		// break;
-		// default:
-		// throw new RuntimeException("More than one current game...");
-		// }
-		// Log.d(TAG, "onCreate: not the first run");
-		// }
 	}
-
-	// private void loadCurrentGame() {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	// private void createGame() {
-	//
-	// currentGame = new Game();
-	// currentGame.setIsCurrent(true);
-	// DatabaseManager.getInstance().createGame(currentGame);
-	//
-	// // Initialize the progress window
-	// mProgressDialog = ProgressDialog.show(this,
-	// getString(R.string.main_creategame_title),
-	// getString(R.string.main_creategame_message), true);
-	//
-	// // Create the thread that will initialize our DB
-	// new Thread((new Runnable() {
-	// @Override
-	// public void run() {
-	// DatabaseInitializator.initializeGame(currentGame);
-	//
-	// Message msg = mHandler.obtainMessage(MSG_END,
-	// getString(R.string.main_creategame_finish));
-	// // sends the message to our handler
-	// mHandler.sendMessage(msg);
-	// setRunned();
-	// }
-	// })).start();
-	//
-	//
-	// }
 
 	/****************************************************************************
 	 * onPause
@@ -496,6 +442,10 @@ public class MainActivity extends SherlockActivity implements
 	    				Log.d(TAG, "many possibilities: " + possibilities.size());
 	    				msg = mHandler.obtainMessage(MSG_MULTI_END,getString(R.string.main_next_multi));
 	    				mHandler.sendMessage(msg);
+	    				//open new game activity
+	    				Intent intent4 = new Intent(PossibilitiesActivity.ACTION_MULTI);
+	    				intent4.putExtra(POSSIBILITIES, new LinkedList<Possibility>(possibilities));
+	    				startActivity(intent4);
 						break;
 					}
 				}
@@ -562,9 +512,11 @@ public class MainActivity extends SherlockActivity implements
 				}
 				break;
 			case MSG_MULTI_END:
-				if (mProgressDialog.isShowing()) {
-					mProgressDialog.dismiss();
-				}
+				Toast.makeText(mContext, ((String) msg.obj), Toast.LENGTH_LONG)
+				.show();
+					if (mProgressDialog.isShowing()) {
+						mProgressDialog.dismiss();
+					}
 				break;
 			default: // should never happen
 				Log.d(TAG, "Oups, handler is in the defautl switch case :/");
