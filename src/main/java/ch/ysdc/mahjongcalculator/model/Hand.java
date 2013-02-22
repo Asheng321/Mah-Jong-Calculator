@@ -62,8 +62,12 @@ public class Hand implements Parcelable, Serializable{
 	public Hand(Possibility possibility) {
 		validity = possibility.getValidity();
 		combinations = possibility.getCombinations();
-		combinations.add(possibility.getPair());
-		combinations.add(possibility.getUnusedTileCombination());
+		if(possibility.getPair() != null){
+			combinations.add(possibility.getPair());
+		}
+		if(possibility.getUnusedTileCombination() != null){
+			combinations.add(possibility.getUnusedTileCombination());
+		}
 	}
 	public int getId() {
         return id;

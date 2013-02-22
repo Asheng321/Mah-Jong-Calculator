@@ -4,47 +4,31 @@
     android:layout_height="fill_parent" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/main.title.layout"
+        <TextView
+            android:id="@+id/main.player.tiles"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:padding="5dp"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/main.player.tiles"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <Button
-                android:id="@+id/main.delete.btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:onClick="deleteTile"
-                android:text="@string/action.delete" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main.player.subtitle" />
 
         <!-- USERS TILES -->
         <!-- OPEN TILES -->
 
         <HorizontalScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/main.player.open.tiles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,12 +41,10 @@
         <!-- HAND TILES -->
 
         <HorizontalScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/main.player.hidden.tiles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,6 +54,36 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+        <LinearLayout
+            android:id="@+id/main.title.layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/main.delete.btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:onClick="deleteTile"
+                android:text="@string/action.delete" />
+            <Button
+                android:id="@+id/main.deleteall.btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:onClick="deleteAllTile"
+                android:text="@string/action.deleteall" />
+        </LinearLayout>
+        <!-- AVAILABLE TILES -->
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/main.tiles.available"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
         <RadioGroup
             android:id="@+id/main.add.type"
             android:layout_width="fill_parent"
@@ -93,14 +105,6 @@
                 android:layout_weight="1"
                 android:text="@string/main.add.open" />
         </RadioGroup>
-        <!-- AVAILABLE TILES -->
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="@string/main.tiles.available"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
         <!-- BAMBOOS -->
 
         <TextView
@@ -110,12 +114,10 @@
             android:text="@string/main.tiles.bamboos" />
 
         <HorizontalScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >

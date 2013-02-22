@@ -41,6 +41,7 @@ public class Combination implements Parcelable,Serializable{
 
 	public Combination(){
 		tiles = new LinkedList<Tile>();
+		type = Type.NONE;
 	}
 	public Combination(Combination c){
 		if(c != null){
@@ -62,6 +63,7 @@ public class Combination implements Parcelable,Serializable{
 	
 	public Combination(Tile t){
 		tiles = new LinkedList<Tile>();
+		type = Type.NONE;
 		tiles.add(t);
 	}
 	public Combination(Parcel in) {
@@ -82,7 +84,7 @@ public class Combination implements Parcelable,Serializable{
 	}
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("Combination(");
+		StringBuffer sb = new StringBuffer("Combination(" + type + "): ");
 		for(Tile tile : tiles){
 			sb.append(tile.getNo() + "" + tile.getCategory() + tile.getId() + ",");
 		}
@@ -142,10 +144,13 @@ public class Combination implements Parcelable,Serializable{
 
 
 	public String getRepresentation() {
+		if(representation == null){
+			setRepresentation();
+		}
 		return representation;
 	}
 	
-	public void setRepresentation() {
+	private void setRepresentation() {
 		switch(this.type){
 		case PAIR:
 		case PONG:
@@ -177,12 +182,17 @@ public class Combination implements Parcelable,Serializable{
 	}
 	
 	public enum Type implements Parcelable{
-        PONG,
-        CHOW,
-        KONG,
-        PAIR,
-        NONE;
+        KONG(16),
+        PONG(8),
+        CHOW(4),
+        PAIR(1),
+        NONE(0);
 
+        private int value;
+        
+        Type(int v){
+        	this.value = v;
+        }
         public static final Parcelable.Creator<Type> CREATOR = new Parcelable.Creator<Type>() {
         	   
             public Type createFromParcel(Parcel in) {
@@ -194,6 +204,11 @@ public class Combination implements Parcelable,Serializable{
             }
              
         };
+        
+		public int getValue() {
+			return value;
+		}
+
 		@Override
 		public int describeContents() {
 			// TODO Auto-generated method stub

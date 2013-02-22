@@ -221,7 +221,7 @@ public class GameActivity extends SherlockActivity implements
 		LinearLayout.LayoutParams paramsLO = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.WRAP_CONTENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
-
+		
 		Collections.sort(combination.getTiles());
 
 		for (int i=0; i<combination.getTiles().size(); i++) {

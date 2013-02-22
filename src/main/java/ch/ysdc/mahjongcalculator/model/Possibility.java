@@ -1,6 +1,7 @@
 package ch.ysdc.mahjongcalculator.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -9,7 +10,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-public class Possibility implements Parcelable, Serializable {
+public class Possibility implements Parcelable, Serializable,Comparable {
 
 
 	private static final long serialVersionUID = 7620094326864403955L;
@@ -23,6 +24,7 @@ public class Possibility implements Parcelable, Serializable {
 	private List<Combination> combinations;
 	private Combination unusedTileCombination;
 	private Combination pair;
+	private Integer value;
 	
 
 	/*****************************************
@@ -138,15 +140,15 @@ public class Possibility implements Parcelable, Serializable {
 	public static void setCounter(int counter) {
 		Possibility.counter = counter;
 	}
-
-	/*****************************************
-	@Override
-	*****************************************/
 	@Override
 	public String toString(){
 		return this.getId() + " (" + this.getUnusedTiles().size() + ", " + this.getCombinations().size() + ")";
 	}
 
+
+	/*****************************************
+	 OWn Method
+	*****************************************/
 	public String displayTiles() {
 		StringBuffer sb = new StringBuffer("(" + this.getUnusedTiles().size() + ") ");
 		for(Tile tile : getUnusedTiles()){
@@ -200,6 +202,16 @@ public class Possibility implements Parcelable, Serializable {
 		return false;
 	}
 
+	public Integer getValue(){
+		if(value== null){
+			value = 0;
+			for(Combination c : getCombinations()){
+				value += c.getType().getValue();
+			}
+		}
+		return value;
+	}
+	
 	public boolean samePair(Combination pair2) {
 		if(pair == null){
 			if(pair2 == null){
@@ -242,6 +254,14 @@ public class Possibility implements Parcelable, Serializable {
             return new Possibility[size];
         }
     };
-	
-	
+
+
+	@Override
+	public int compareTo(Object p) {
+		int val = getValue().compareTo(((Possibility)p).getValue());
+		if(val == 0){
+			return Integer.valueOf(this.getId()).compareTo(Integer.valueOf(((Possibility)p).getId()));
+		}
+		return val;
+	}
 }

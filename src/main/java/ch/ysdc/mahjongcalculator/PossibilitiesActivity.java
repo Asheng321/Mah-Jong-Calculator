@@ -1,5 +1,7 @@
 package ch.ysdc.mahjongcalculator;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.content.Intent;
@@ -21,13 +23,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class PossibilitiesActivity extends SherlockActivity implements OnItemClickListener{
+public class PossibilitiesActivity extends SherlockActivity implements
+		OnItemClickListener {
 
 	private static String TAG = "PossibilitiesActivity";
 	public static final String ACTION_MULTI = "ch.ysdc.mahjongcalculator.action.MULTI";
-	
+
 	private List<Possibility> possibilities;
-	private int selectedItem;
+	private Integer selectedItem;
 	private ListView listView;
 	private PossibilityArrayAdapter adapter;
 
@@ -88,6 +91,7 @@ public class PossibilitiesActivity extends SherlockActivity implements OnItemCli
 			possibilities = extras
 					.getParcelableArrayList(MainActivity.POSSIBILITIES);
 			getIntent().removeExtra(MainActivity.POSSIBILITIES);
+			selectedItem = -1;
 			initializeList();
 		}
 		Log.d(TAG, "onCreate, possibilities: "
@@ -106,6 +110,7 @@ public class PossibilitiesActivity extends SherlockActivity implements OnItemCli
 	/****************************************************************************
 	 * onStart
 	 ****************************************************************************/
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -116,7 +121,10 @@ public class PossibilitiesActivity extends SherlockActivity implements OnItemCli
 		if (possibilities == null) {
 			Log.d(TAG, "was null");
 			// Try to load saved hand
-			possibilities = fm.readPossibilities(MainActivity.POSSIBILITIES);
+			Object[] tmp = fm.readPossibilities(MainActivity.POSSIBILITIES);
+			possibilities = (List<Possibility>) tmp[0];
+			selectedItem = (Integer) tmp[1];
+			Log.d(TAG, "After start,  values: " + selectedItem);
 			initializeList();
 			adapter.notifyDataSetChanged();
 		}
@@ -134,7 +142,8 @@ public class PossibilitiesActivity extends SherlockActivity implements OnItemCli
 				+ (possibilities != null ? possibilities.size() : "null"));
 
 		FileManager fm = new FileManager(getFilesDir());
-		fm.savePossibilities(possibilities, MainActivity.POSSIBILITIES);
+		fm.savePossibilities(possibilities, selectedItem,
+				MainActivity.POSSIBILITIES);
 	}
 
 	/****************************************************************************
@@ -172,26 +181,28 @@ public class PossibilitiesActivity extends SherlockActivity implements OnItemCli
 	 ****************************************************************************/
 	private void initializeList() {
 
+		Collections.sort(possibilities, new InnerComparator());
 		adapter = new PossibilityArrayAdapter(this,
 				possibilities.toArray(new Possibility[possibilities.size()]));
 		// Assign adapter to ListView
 		listView.setAdapter(adapter);
 		listView.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-
-		selectedItem = -1;
 		listView.setOnItemClickListener(this);
 	}
 
 	public void rowSelected(View view) {
 
+		Log.d(TAG, view.getTag() + " -> " + selectedItem);
 		if (selectedItem >= 0) {
 			// Change old button state
 			LinearLayout layout = (LinearLayout) listView
 					.getChildAt(selectedItem);
-			ImageButton btn = (ImageButton) layout
-					.findViewById(R.id.possibilities_selection);
-			btn.setImageResource(getResources().getIdentifier("nonselected",
-					"drawable", this.getPackageName()));
+			if (layout != null) {
+				ImageButton btn = (ImageButton) layout
+						.findViewById(R.id.possibilities_selection);
+				btn.setImageResource(getResources().getIdentifier(
+						"nonselected", "drawable", this.getPackageName()));
+			}
 		}
 		// Set new button state
 		((ImageButton) view).setImageResource(getResources().getIdentifier(
@@ -205,19 +216,37 @@ public class PossibilitiesActivity extends SherlockActivity implements OnItemCli
 	public void onItemClick(AdapterView<?> myAdapter, View myView,
 			int myItemInt, long mylng) {
 
+		Log.d(TAG, myView.getTag() + " -> " + selectedItem);
 		if (selectedItem >= 0) {
 			// Change old button state
 			LinearLayout layout = (LinearLayout) listView
 					.getChildAt(selectedItem);
-			ImageButton btn = (ImageButton) layout
-					.findViewById(R.id.possibilities_selection);
-			btn.setImageResource(getResources().getIdentifier("nonselected",
-					"drawable", this.getPackageName()));
+			if (layout != null) {
+				Log.d(TAG, "Layout null");
+				ImageButton btn = (ImageButton) layout
+						.findViewById(R.id.possibilities_selection);
+				btn.setImageResource(getResources().getIdentifier(
+						"nonselected", "drawable", this.getPackageName()));
+			}
 		}
 		// Set new button state
-		ImageButton btn = (ImageButton) myView.findViewById(R.id.possibilities_selection);
-		btn.setImageResource(getResources().getIdentifier(
-				"selected", "drawable", this.getPackageName()));
+		ImageButton btn = (ImageButton) myView
+				.findViewById(R.id.possibilities_selection);
+		btn.setImageResource(getResources().getIdentifier("selected",
+				"drawable", this.getPackageName()));
+		// Set the selected
+		selectedItem = (Integer) myView.getTag();
 	}
 
+	public Integer getSelectedItem() {
+		return selectedItem;
+	}
+
+	public class InnerComparator implements Comparator<Possibility> {
+
+		public int compare(Possibility a, Possibility b) {
+			return b.getValue().compareTo(a.getValue());
+		}
+	}
+	
 }

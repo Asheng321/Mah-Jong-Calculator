@@ -111,13 +111,14 @@ public class FileManager {
 	/****************************************************************************
 	 * Store possibilities in the file system
 	 ****************************************************************************/
-	public void savePossibilities(List<Possibility> possibilities, String filename){
+	public void savePossibilities(List<Possibility> possibilities, Integer selectedItem, String filename){
 		Log.d(TAG, "savePossibility: " + possibilities);
 		ObjectOutputStream outputStream = null;
 		try {
 				File file = new File(appFolder,filename);
 				outputStream = new ObjectOutputStream(new FileOutputStream(file));
 				outputStream.writeObject(possibilities);
+				outputStream.writeInt(selectedItem);
 				outputStream.flush();
 				outputStream.close();
 			} catch (Exception e) {
@@ -130,23 +131,31 @@ public class FileManager {
 	 * Read possibilities in the file system
 	 ****************************************************************************/
 	@SuppressWarnings("unchecked")
-	public List<Possibility> readPossibilities(String filename){
+	public Object[] readPossibilities(String filename){
 		Log.d(TAG, "readHand");
 		ObjectInputStream inputStream = null;
-		List<Possibility> possibilities = null;
+		Object[] tmp = new Object[2];
+		
 		try {
 			File file = new File(appFolder,filename);
 			if(!file.exists()){
 				return null;
 			}
 			inputStream = new ObjectInputStream(new FileInputStream(file));
-			possibilities = (List<Possibility>)inputStream.readObject();
+			tmp[0] = (List<Possibility>)inputStream.readObject();
+			tmp[1] = inputStream.readInt();
 			inputStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e(TAG, "Exception during readHand", e);
 		}
-		return (possibilities != null ? possibilities : new LinkedList<Possibility>());
+		if(tmp[0] == null){
+			tmp[0] = new LinkedList<Possibility>();
+		}
+		if(tmp[1]== null){
+			tmp[1] = -1;
+		}
+		return tmp;
 	}
 
 }

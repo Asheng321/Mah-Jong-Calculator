@@ -1,5 +1,6 @@
 package ch.ysdc.mahjongcalculator.manager;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class CombinationManager {
 		while(it.hasNext()){
 			Possibility p = it.next();
 
-			if (p.getCombinations().size()>4){
+			if((p.getValidity() != Validity.MAHJONG) && (p.getCombinations().size()>4)){
 				p.setValidity(Validity.INVALID);
 			}
 			
@@ -156,17 +157,21 @@ public class CombinationManager {
 		}
 
 		possibility.getUnusedTileCombination().setType(Combination.Type.NONE);
-		possibility.getUnusedTileCombination().setRepresentation();
 		if(isWinningPossibility(possibility)){
 			this.hasValidMahjong = true;
 		}
 	}
 	
 	private boolean isWinningPossibility(Possibility possibility) {
-		if(possibility.getValidity() == Validity.VALID){
+		if(((possibility.getValidity() == Validity.VALID) && (possibility.getPair() != null) && (possibility.getCombinations().size()==4) && (possibility.getUnusedTileCombination().getTiles().size()==0)) 
+			|| isSpecialHand())
+		{
 			possibility.setValidity(Validity.MAHJONG);
 			return true;
 		}
+		return false;
+	}
+	private boolean isSpecialHand(){
 		return false;
 	}
 
@@ -305,7 +310,6 @@ public class CombinationManager {
 			Combination c = new Combination(tile);
 			c.addTiles(bottomChow);
 			c.setType(Combination.Type.CHOW);
-			c.setRepresentation();
 			combinations.add(c);
 			Log.d(TAG, "** topChow confirmed (" + bottomChow[0].getNo() + bottomChow[1].getNo() + tile.getNo() + ")");
 		}
@@ -313,7 +317,6 @@ public class CombinationManager {
 			Combination c = new Combination(tile);
 			c.addTiles(middleChow);
 			c.setType(Combination.Type.CHOW);
-			c.setRepresentation();
 			combinations.add(c);
 			Log.d(TAG, "** middleChow confirmed (" + middleChow[0].getNo() + tile.getNo() + middleChow[1].getNo() + ")");
 		}
@@ -321,44 +324,46 @@ public class CombinationManager {
 			Combination c = new Combination(tile);
 			c.addTiles(topChow);
 			c.setType(Combination.Type.CHOW);
-			c.setRepresentation();
 			combinations.add(c);
 			Log.d(TAG, "** topChow confirmed (" + tile.getNo()+ topChow[0].getNo()  + topChow[1].getNo() + ")");
 		}
 		switch(similar.getTiles().size()){
 			case 2:
 				similar.setType(Combination.Type.PAIR);
-				similar.setRepresentation();
 				combinations.add(similar);
 				Log.d(TAG, "** pair confirmed");
 				break;
 			case 3:
 				similar.setType(Combination.Type.PONG);
-				similar.setRepresentation();
 				combinations.add(similar);
 				Log.d(TAG, "** pong confirmed");
 				break;
 			case 4:
 				similar.setType(Combination.Type.KONG);
-				similar.setRepresentation();
 				combinations.add(similar);
-				Combination c = new Combination(tile);
+				//Combination cPair = new Combination(tile);
+				Combination cPong = new Combination(tile);
 				for(Tile t : similar.getTiles()){
 					if(t.equals(tile)){
 						continue;
 					}
-					c.addTile(t);
-					if(c.getTiles().size()==3){
-						break;
+//					if(cPair.getTiles().size()<2){
+//						cPair.addTile(t);
+//					}
+					if(cPong.getTiles().size()<3){
+						cPong.addTile(t);
 					}
 				}
-				combinations.add(c);
+//				cPair.setType(Type.PAIR);
+//				combinations.add(cPair);
+				cPong.setType(Type.PONG);
+				combinations.add(cPong);
 				Log.d(TAG, "** kong confirmed");
 			
 		}
 		Log.d(TAG, "** searchCombination finished: (" + combinations + ")");
 		return combinations;
 	}
-
 }
+
 

@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -336,6 +338,9 @@ public class MainActivity extends SherlockActivity implements
 		// update delete button
 		Button delete = (Button) findViewById(R.id.main_delete_btn);
 		delete.setEnabled(tileSelected >= 0);
+		
+		Button deleteall = (Button) findViewById(R.id.main_deleteall_btn);
+		deleteall.setEnabled(tileCounter > 0);
 	}
 
 	/****************************************************************************
@@ -373,6 +378,38 @@ public class MainActivity extends SherlockActivity implements
 	}
 
 	/****************************************************************************
+	 * Method called by the delete all button. It will delete all the tiles and
+	 * update the tile count.
+	 * 
+	 * @param view
+	 *            The view representing the delete button
+	 ****************************************************************************/
+	public void deleteAllTile(View view) {
+		new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle(R.string.action_delete_all_title)
+        .setMessage(R.string.action_delete_all_msg)
+        .setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+        		tileSelected = -1;
+        		tileCounter = 0;
+        		openTiles = new HashMap<String, Integer>();
+        		hiddenTiles = new HashMap<String, Integer>();
+
+        		LinearLayout playerLayout = (LinearLayout)findViewById(R.id.main_player_hidden_tiles);
+        		playerLayout.removeAllViews();
+        		playerLayout = (LinearLayout)findViewById(R.id.main_player_open_tiles);
+        		playerLayout.removeAllViews();
+        		
+        		updateCounter();   
+            }
+        })
+        .setNegativeButton(R.string.action_no, null)
+        .show();
+	}
+
+	/****************************************************************************
 	 * Called when a user click on the player tile.
 	 ****************************************************************************/
 	@Override
@@ -396,6 +433,11 @@ public class MainActivity extends SherlockActivity implements
 		Log.d(TAG, "optionSelected: " + item.getItemId());
 		switch (item.getItemId()) {
 		case R.id.main_option_next:
+			if(tileCounter < 13 || tileCounter > 18){
+				Toast.makeText(mContext, getString(R.string.error_tile_quantity), Toast.LENGTH_LONG)
+						.show();
+				return true;
+			}
 			// Initialize the progress window
 			mProgressDialog = ProgressDialog.show(this,
 					getString(R.string.main_next_title),

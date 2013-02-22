@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import ch.ysdc.mahjongcalculator.PossibilitiesActivity;
 import ch.ysdc.mahjongcalculator.R;
 import ch.ysdc.mahjongcalculator.model.Combination;
 import ch.ysdc.mahjongcalculator.model.Possibility;
@@ -18,11 +19,11 @@ import ch.ysdc.mahjongcalculator.utils.AndroidUtils;
 
 
 public class PossibilityArrayAdapter extends ArrayAdapter<Possibility>{
-	  private final Context context;
+	  private final PossibilitiesActivity context;
 	  private final Possibility[] values;
 		private static String TAG = "PossibilityArrayAdapter";
 
-	  public PossibilityArrayAdapter(Context context, Possibility[] values) {
+	  public PossibilityArrayAdapter(PossibilitiesActivity context, Possibility[] values) {
 	    super(context, R.layout.possibilitycell, values);
 	    this.context = context;
 	    this.values = values;
@@ -30,6 +31,7 @@ public class PossibilityArrayAdapter extends ArrayAdapter<Possibility>{
 
 	  @Override
 	  public View getView(int position, View convertView, ViewGroup parent) {
+		  Log.d(TAG, "getView: " + position);
 	    LayoutInflater inflater = (LayoutInflater) context
 	        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    View rowView = inflater.inflate(R.layout.possibilitycell, parent, false);
@@ -47,6 +49,13 @@ public class PossibilityArrayAdapter extends ArrayAdapter<Possibility>{
 
 		//Set the tag of the selection icon
 		ImageButton selection = (ImageButton)rowView.findViewById(R.id.possibilities_selection);
+		if(position == context.getSelectedItem()){
+			selection.setImageResource(context.getResources().getIdentifier(
+					"selected", "drawable", context.getPackageName()));
+		}else{
+			selection.setImageResource(context.getResources().getIdentifier(
+					"nonselected", "drawable", context.getPackageName()));
+		}
 		selection.setTag(position);
 		rowView.setTag(position);
 
@@ -62,7 +71,7 @@ public class PossibilityArrayAdapter extends ArrayAdapter<Possibility>{
 		 ****************************************************************************/
 		@SuppressWarnings("deprecation")
 		private void addCombination(Combination combination, View rowView) {
-			Log.d(TAG, "addCombination");
+
 			LinearLayout.LayoutParams paramsLO = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.WRAP_CONTENT,
 					LinearLayout.LayoutParams.WRAP_CONTENT);
