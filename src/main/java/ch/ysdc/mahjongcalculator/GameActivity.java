@@ -1,9 +1,12 @@
 package ch.ysdc.mahjongcalculator;
 
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +30,12 @@ public class GameActivity extends SherlockActivity implements
 
 	private static String TAG = "GameActivity";
 	public static final String ACTION_GAME = "ch.ysdc.mahjongcalculator.action.GAME";
+	public static final String WIND = "ch.ysdc.mahjongcalculator.WIND";
+	public static final String FLOW_AND_SEAS = "ch.ysdc.mahjongcalculator.flowandseas";
+	
 	private Hand hand;
+	private List<Integer> wind;
+	private List<Integer> flowersAndSeasons;
 
 	public static final int MSG_ERR = 0;
 	public static final int MSG_END = 1;
@@ -44,7 +52,6 @@ public class GameActivity extends SherlockActivity implements
 	 ****************************************************************************/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Log.d(TAG, "onCreateOptionsMenu");
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.game_menu, menu);
 		return true;
@@ -62,6 +69,8 @@ public class GameActivity extends SherlockActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.game);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Log.i(TAG, "onCreate");
 
 	    Bundle extras = getIntent().getExtras();
@@ -69,11 +78,12 @@ public class GameActivity extends SherlockActivity implements
 	    	Possibility possibility = extras.getParcelable(MainActivity.POSSIBILITY);
 	    	if(possibility != null){
 	    		hand = new Hand(possibility);
+	    		wind = new LinkedList<Integer>();
+	    		flowersAndSeasons = new LinkedList<Integer>();
 	    	}
 	    	getIntent().removeExtra(MainActivity.POSSIBILITY);
 	    }
 		
-		setContentView(R.layout.game);
 	}
 
 	/****************************************************************************
@@ -99,6 +109,8 @@ public class GameActivity extends SherlockActivity implements
 		if(hand == null){
 			// Try to load saved hand
 			hand = fm.readHand(MainActivity.POSSIBILITY);
+    		wind = fm.readIntegerList(WIND);
+    		flowersAndSeasons = fm.readIntegerList(FLOW_AND_SEAS);
 		}
 		Log.d(TAG, "nb combo: " + hand.getCombinations().size());
 		initializeView();
@@ -115,6 +127,8 @@ public class GameActivity extends SherlockActivity implements
 		Log.d(TAG, "nb combo: " + hand.getCombinations().size());
 		FileManager fm = new FileManager(getFilesDir());
 		fm.saveHand(hand, MainActivity.POSSIBILITY);
+		fm.saveIntegerList(wind, WIND);
+		fm.saveIntegerList(flowersAndSeasons, FLOW_AND_SEAS);
 		resetView();
 	}
 
@@ -155,7 +169,8 @@ public class GameActivity extends SherlockActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "optionSelected: " + item.getItemId());
 		switch (item.getItemId()) {
-		case R.id.game_option_previous:
+		case android.R.id.home:
+			this.finish();
 			return true;
 		case R.id.game_option_next:
 			return true;
@@ -167,6 +182,10 @@ public class GameActivity extends SherlockActivity implements
 		case R.id.game_option_about:
 			return true;
 		case R.id.game_option_exit:
+			Intent intent4 = new Intent(Intent.ACTION_MAIN);
+			intent4.addCategory(Intent.CATEGORY_HOME);
+			intent4.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent4);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -177,25 +196,27 @@ public class GameActivity extends SherlockActivity implements
 	 * WindSelected, called when the user select a wind
 	 ****************************************************************************/
 	public void windSelected(View view) {
-		// TODO Auto-generated method stub
-		Log.d(TAG, "windSelected");
-
+		if (wind.size() > 0) {
+			ImageButton btn = (ImageButton) findViewById(wind.get(0));
+			btn.setBackgroundColor(Color.TRANSPARENT);
+		}
+		wind.clear();
+		wind.add(view.getId());
+		Log.d(TAG, "Player wind Selected: " + view.getTag());
+		((ImageButton) view).setBackgroundColor(Color.YELLOW);
 	}
 
 	/****************************************************************************
 	 * FlowerSelected, called when the user select a flower
 	 ****************************************************************************/
-	public void flowerSelected(View view) {
-		// TODO Auto-generated method stub
-		Log.d(TAG, "flowerSelected");
-	}
-
-	/****************************************************************************
-	 * SeasonSelected, called when the user select a season
-	 ****************************************************************************/
-	public void seasonSelected(View view) {
-		// TODO Auto-generated method stub
-		Log.d(TAG, "seasonSelected");
+	public void flowerOrSeasonSelected(View view) {
+		if (flowersAndSeasons.contains(view.getId())) {
+			view.setBackgroundColor(Color.TRANSPARENT);
+			flowersAndSeasons.remove(Integer.valueOf(view.getId()));
+		}else{
+			view.setBackgroundColor(Color.YELLOW);
+			flowersAndSeasons.add(Integer.valueOf(view.getId()));
+		}
 	}
 
 	/****************************************************************************
@@ -266,6 +287,14 @@ public class GameActivity extends SherlockActivity implements
 		for(Combination combination : hand.getCombinations()){
 			addTile(combination);
 		}
+		for(Integer i : wind){
+			ImageButton btn = (ImageButton)findViewById(i);
+			btn.setBackgroundColor(Color.YELLOW);
+		}
+		for(Integer i : flowersAndSeasons){
+			ImageButton btn = (ImageButton)findViewById(i);
+			btn.setBackgroundColor(Color.YELLOW);
+		}
 	}
 
 	/****************************************************************************
@@ -273,12 +302,23 @@ public class GameActivity extends SherlockActivity implements
 	 ****************************************************************************/
 	private void resetView() {
 		
-		LinearLayout playerLayout = (LinearLayout) findViewById(R.id.game_player_open_tiles);
-		playerLayout.removeAllViews();
+		LinearLayout layout = (LinearLayout) findViewById(R.id.game_player_open_tiles);
+		layout.removeAllViews();
 
-		playerLayout = (LinearLayout) findViewById(R.id.game_player_hidden_tiles);
-		playerLayout.removeAllViews();
-		
+		layout = (LinearLayout) findViewById(R.id.game_player_hidden_tiles);
+		layout.removeAllViews();
+
+		for(Integer i : wind){
+			ImageButton btn = (ImageButton)findViewById(i);
+			btn.setBackgroundColor(Color.TRANSPARENT);
+		}
+		for(Integer i : flowersAndSeasons){
+			ImageButton btn = (ImageButton)findViewById(i);
+			btn.setBackgroundColor(Color.TRANSPARENT);
+		}
+
 		hand = null;
+		wind = null;
+		flowersAndSeasons = null;
 	}
 }

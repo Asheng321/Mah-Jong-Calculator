@@ -158,4 +158,46 @@ public class FileManager {
 		return tmp;
 	}
 
+	/****************************************************************************
+	 * Store an hashmap in the file system
+	 ****************************************************************************/
+	public void saveIntegerList(List<Integer> t, String filename){
+		Log.d(TAG, "saveIntegerArray: " + t.size());
+		ObjectOutputStream outputStream = null;
+		try {
+				File file = new File(appFolder,filename);
+				outputStream = new ObjectOutputStream(new FileOutputStream(file));
+				outputStream.writeObject(t);
+				outputStream.flush();
+				outputStream.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.e(TAG, "Exception during saveIntegerArray", e);
+			}
+	}
+
+	/****************************************************************************
+	 * Read an hashmap in the file system
+	 ****************************************************************************/
+	@SuppressWarnings("unchecked")
+	public List<Integer> readIntegerList(String filename){
+		Log.d(TAG, "readPlayerTiles");
+		ObjectInputStream inputStream = null;
+		List<Integer> t = null;
+		try {
+			File file = new File(appFolder,filename);
+			if(!file.exists()){
+				return new LinkedList<Integer>();
+			}
+			inputStream = new ObjectInputStream(new FileInputStream(file));
+			t = (List<Integer>)inputStream.readObject();
+			inputStream.close();
+			Log.d(TAG, "integers: " + (t != null ? t.size() : "null"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e(TAG, "Exception during readPlayerTiles", e);
+		}
+
+		return (t == null ? new LinkedList<Integer>() : t);
+	}
 }

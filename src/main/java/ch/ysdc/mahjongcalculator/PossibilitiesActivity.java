@@ -4,8 +4,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,43 +41,11 @@ public class PossibilitiesActivity extends SherlockActivity implements
 	 ****************************************************************************/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.possibilities_menu, menu);
 		return true;
 	}
-
-	/****************************************************************************
-	 * onOptionsItemSelected
-	 ****************************************************************************/
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Log.d(TAG, "optionSelected: " + item.getItemId());
-		switch (item.getItemId()) {
-		case R.id.possibilities_option_previous:
-			return true;
-		case R.id.possibilities_option_next:
-
-			// Intent intent3 = new Intent(GameActivity.ACTION_GAME);
-			// intent3.putExtra(MainActivity.POSSIBILITY,
-			// (Parcelable)possibilities.get(position));
-			// startActivity(intent3);
-
-			return true;
-		case R.id.possibilities_option_settings:
-			Log.d(TAG, "Enter the settings Option case");
-			Intent intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
-			return true;
-		case R.id.possibilities_option_about:
-			return true;
-		case R.id.possibilities_option_exit:
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
+	
 	/****************************************************************************
 	 * onCreate
 	 ****************************************************************************/
@@ -83,6 +53,8 @@ public class PossibilitiesActivity extends SherlockActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.possibilities);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		// Show the Up button in the action bar.
 		listView = (ListView) findViewById(R.id.possibilities_list);
 
@@ -190,13 +162,25 @@ public class PossibilitiesActivity extends SherlockActivity implements
 		listView.setOnItemClickListener(this);
 	}
 
+
+	/****************************************************************************
+	 * get the selected item. Used by the adapter to get the selected item 
+	 ****************************************************************************/
+	public Integer getSelectedItem() {
+		return selectedItem;
+	}
+
+
+	/****************************************************************************
+	 * Listener methods
+	 ****************************************************************************/
 	public void rowSelected(View view) {
 
 		Log.d(TAG, view.getTag() + " -> " + selectedItem);
-		if (selectedItem >= 0) {
+		if ((selectedItem >= 0) && (selectedItem >= listView.getFirstVisiblePosition()) && (selectedItem <= listView.getLastVisiblePosition())){
 			// Change old button state
 			LinearLayout layout = (LinearLayout) listView
-					.getChildAt(selectedItem);
+					.getChildAt(selectedItem-listView.getFirstVisiblePosition());
 			if (layout != null) {
 				ImageButton btn = (ImageButton) layout
 						.findViewById(R.id.possibilities_selection);
@@ -217,12 +201,11 @@ public class PossibilitiesActivity extends SherlockActivity implements
 			int myItemInt, long mylng) {
 
 		Log.d(TAG, myView.getTag() + " -> " + selectedItem);
-		if (selectedItem >= 0) {
+		if ((selectedItem >= 0) && (selectedItem >= listView.getFirstVisiblePosition()) && (selectedItem <= listView.getLastVisiblePosition())){
 			// Change old button state
 			LinearLayout layout = (LinearLayout) listView
-					.getChildAt(selectedItem);
+					.getChildAt(selectedItem-listView.getFirstVisiblePosition());
 			if (layout != null) {
-				Log.d(TAG, "Layout null");
 				ImageButton btn = (ImageButton) layout
 						.findViewById(R.id.possibilities_selection);
 				btn.setImageResource(getResources().getIdentifier(
@@ -238,8 +221,47 @@ public class PossibilitiesActivity extends SherlockActivity implements
 		selectedItem = (Integer) myView.getTag();
 	}
 
-	public Integer getSelectedItem() {
-		return selectedItem;
+
+	/****************************************************************************
+	 * onOptionsItemSelected
+	 ****************************************************************************/
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Log.d(TAG, "optionSelected: " + item.getItemId());
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			this.finish();
+			return true;
+		case R.id.possibilities_option_next:
+			if(selectedItem == null || selectedItem < 0){
+				new AlertDialog.Builder(this)
+		        .setIcon(android.R.drawable.ic_dialog_alert)
+		        .setTitle(R.string.action_select_possibility_title)
+		        .setMessage(R.string.action_select_possibility_msg)
+		        .setPositiveButton(R.string.action_yes, null)
+		        .show();
+			}else{
+			 Intent intent3 = new Intent(GameActivity.ACTION_GAME);
+			 intent3.putExtra(MainActivity.POSSIBILITY,(Parcelable)possibilities.get(selectedItem));
+			 startActivity(intent3);
+			}
+			return true;
+		case R.id.possibilities_option_settings:
+			Log.d(TAG, "Enter the settings Option case");
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.possibilities_option_about:
+			return true;
+		case R.id.possibilities_option_exit:
+			Intent intent4 = new Intent(Intent.ACTION_MAIN);
+			intent4.addCategory(Intent.CATEGORY_HOME);
+			intent4.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent4);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	public class InnerComparator implements Comparator<Possibility> {

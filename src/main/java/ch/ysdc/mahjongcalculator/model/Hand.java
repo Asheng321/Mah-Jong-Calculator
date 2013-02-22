@@ -37,19 +37,36 @@ public class Hand implements Parcelable, Serializable{
     private Validity validity;
     @ForeignCollectionField(columnName = COMBO_FIELD_NAME)
     private ForeignCollection<Combination> storedCombinations;
-
+    //TODO: add the necessary persistence annotations
+	private List<Point> points;
+	private List<Point> bonuses;
+	private int playerWind;
+	private List<Tile> flowers;
+	private List<Tile> seasons;
+	
+	//TODO: temp solution, to avoid the fucking foreing collection
     private List<Combination> combinations;
     
     public Hand(){
     	super();
     	combinations = new LinkedList<Combination>();
     	validity = Validity.VALID;
+		points = new LinkedList<Point>();
+		bonuses = new LinkedList<Point>();
+		playerWind = -1;
+		flowers = new LinkedList<Tile>();
+		seasons = new LinkedList<Tile>();
     }
     public Hand(String name) {
 		super();
 		this.name = name;
     	combinations = new LinkedList<Combination>();
     	validity = Validity.VALID;
+		points = new LinkedList<Point>();
+		bonuses = new LinkedList<Point>();
+		playerWind = -1;
+		flowers = new LinkedList<Tile>();
+		seasons = new LinkedList<Tile>();
 	}
 
 	public Hand(Parcel in) {
@@ -58,6 +75,16 @@ public class Hand implements Parcelable, Serializable{
 		combinations = new LinkedList<Combination>();
 		in.readTypedList(combinations, Combination.CREATOR);
 		validity = in.readParcelable(Validity.class.getClassLoader());
+		points = new LinkedList<Point>();
+		in.readTypedList(points, Point.CREATOR);
+		bonuses = new LinkedList<Point>();
+		in.readTypedList(bonuses, Point.CREATOR);
+
+		playerWind = in.readInt();
+		flowers = new LinkedList<Tile>();
+		in.readTypedList(flowers, Tile.CREATOR);
+		seasons = new LinkedList<Tile>();
+		in.readTypedList(seasons, Tile.CREATOR);
 	}
 	public Hand(Possibility possibility) {
 		validity = possibility.getValidity();
@@ -68,6 +95,11 @@ public class Hand implements Parcelable, Serializable{
 		if(possibility.getUnusedTileCombination() != null){
 			combinations.add(possibility.getUnusedTileCombination());
 		}
+		points = new LinkedList<Point>();
+		bonuses = new LinkedList<Point>();
+		playerWind = -1;
+		flowers = new LinkedList<Tile>();
+		seasons = new LinkedList<Tile>();
 	}
 	public int getId() {
         return id;
@@ -107,6 +139,40 @@ public class Hand implements Parcelable, Serializable{
 	public void addCombination(Combination c){
 		this.combinations.add(c);
     }
+	
+	public List<Point> getPoints() {
+		return points;
+	}
+	public void setPoints(List<Point> points) {
+		this.points = points;
+	}
+	public List<Point> getBonuses() {
+		return bonuses;
+	}
+	public void setBonuses(List<Point> bonuses) {
+		this.bonuses = bonuses;
+	}
+	
+	
+	
+	public int getPlayerWind() {
+		return playerWind;
+	}
+	public void setPlayerWind(int playerWind) {
+		this.playerWind = playerWind;
+	}
+	public List<Tile> getFlowers() {
+		return flowers;
+	}
+	public void setFlowers(List<Tile> flowers) {
+		this.flowers = flowers;
+	}
+	public List<Tile> getSeasons() {
+		return seasons;
+	}
+	public void setSeasons(List<Tile> seasons) {
+		this.seasons = seasons;
+	}
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -118,6 +184,11 @@ public class Hand implements Parcelable, Serializable{
 		out.writeString(name);
 		out.writeTypedList(combinations);
 		out.writeParcelable(validity, flags);
+		out.writeTypedList(points);
+		out.writeTypedList(bonuses);
+		out.writeInt(playerWind);
+		out.writeTypedList(flowers);
+		out.writeTypedList(seasons);
 	}
 	
 	public static final Parcelable.Creator<Hand> CREATOR = new Parcelable.Creator<Hand>() {

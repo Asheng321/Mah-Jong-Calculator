@@ -27,6 +27,7 @@ public class SettingsActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
         setContentView(R.layout.settings);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 	@Override

@@ -96,7 +96,8 @@ public class MainActivity extends SherlockActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		//getSupportActionBar().setSubtitle("Hello world. What is the maximum space i have for my subtitle?");
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		// Initialization
 		setContentView(R.layout.main);
 		// Save the context, for the future handler
@@ -510,10 +511,10 @@ public class MainActivity extends SherlockActivity implements
 			// }
 			return true;
 		case R.id.main_option_exit:
-			// Log.d(TAG, "\nDisplay hand tiles");
-			// for(Tile t : currentGame.getTiles()){
-			// Log.d(TAG, "Tile: " + t);
-			// }
+			Intent intent4 = new Intent(Intent.ACTION_MAIN);
+			intent4.addCategory(Intent.CATEGORY_HOME);
+			intent4.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent4);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

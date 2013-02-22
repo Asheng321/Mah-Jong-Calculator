@@ -11,14 +11,14 @@
 
         <!-- USERS TILES -->
 
-            <TextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/game.player.tiles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/game.player.tiles"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/game.player.tiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/game.player.tiles"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         <!-- OPEN TILES -->
 
         <HorizontalScrollView
@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="flowerSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_1f"
                 android:tag="tile_1f" />
@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="flowerSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_2f"
                 android:tag="tile_2f" />
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="flowerSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_3f"
                 android:tag="tile_3f" />
@@ -177,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="flowerSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_4f"
                 android:tag="tile_4f" />
@@ -208,7 +208,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="seasonSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_1s"
                 android:tag="tile_1s" />
@@ -219,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="seasonSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_2s"
                 android:tag="tile_2s" />
@@ -230,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="seasonSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_3s"
                 android:tag="tile_3s" />
@@ -241,12 +241,20 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="seasonSelected"
+                android:onClick="flowerOrSeasonSelected"
                 android:padding="6dp"
                 android:src="@drawable/tile_4s"
                 android:tag="tile_4s" />
         </LinearLayout>
 
+        <TextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/game.mahjong.points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/game.mahjong.points"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         <!-- LAST TILES SELECTED -->
 
         <LinearLayout
