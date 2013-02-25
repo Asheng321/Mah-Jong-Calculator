@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/result_option_settings"
+        android:icon="@drawable/settings"
+        android:showAsAction="never|withText"
+        android:title="@string/option.settings"/>
+    <item
+        android:id="@+id/result_option_about"
+        android:showAsAction="never|withText"
+        android:title="@string/option.about"/>
+    <item
+        android:id="@+id/result_option_exit"
+        android:showAsAction="never|withText"
+        android:title="@string/option.exit"/>
+</menu>

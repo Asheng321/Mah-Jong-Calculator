@@ -5,6 +5,14 @@
         <item quantity="one">Player Tile (%d)</item>
         <item quantity="other">Player Tiles (%d)</item>
     </plurals>
+    <plurals name="playerFlowerQuantity">
+        <item quantity="one">%d Flower</item>
+        <item quantity="other">%d Flowers</item>
+    </plurals>
+    <plurals name="playerSeasonQuantity">
+        <item quantity="one">%d Season</item>
+        <item quantity="other">%d Seasons</item>
+    </plurals>
 
     <string name="app_name">Mah-Jong Calculator</string>
     <string name="player.tile">Tile of the player</string>
@@ -72,8 +80,64 @@
     <string name="game.season.title">Player Seasons</string>
     <string name="game.player.tiles">Player Combinations</string>
     <string name="game.mahjong.points">Winner specific points</string>
+    <string name="game.wind.game.title">Game wind</string>
+    <string name="game.wind.round.title">Round wind</string>
+    <string name="game.result.title">&quot;Please wait&#8230;&quot;</string>
+    <string name="game.result.msg">&quot;Calculating possibilities&#8230;&quot;</string>
     <string name="possibilities.title">Select a possibility</string>
     <string name="possibilities.subtitle">You have multiple combination possible. Select one to continue to the last step.</string>
+    <string name="point.pair.wind.player">Pair of player wind</string>
+    <string name="point.pair.wind.round">Pair of round wind</string>
+    <string name="point.pair.wind.game">Pair of game wind</string>
+    <string name="point.pair.dragon">Pair of dragon</string>
+    <string name="point.pong.visible.wind">Open pong of wind</string>
+    <string name="point.pong.hidden.wind">Hidden pong of wind</string>
+    <string name="point.pong.wind.player">Pong of player wind</string>
+    <string name="point.pong.wind.round">Pong of round wind</string>
+    <string name="point.pong.wind.game">Pong of game wind</string>
+    <string name="point.pong.visible.dragon">Open pong of wind</string>
+    <string name="point.pong.hidden.dragon">Hidden pong of wind</string>
+    <string name="point.pong.dragon">Open pong of wind</string>
+    <string name="point.pong.visible.terminal">Open pong of terminal</string>
+    <string name="point.pong.hidden.terminal">Hidden pong of terminal</string>
+    <string name="point.pong.visible.common">Open pong</string>
+    <string name="point.pong.hidden.common">Hidden pong</string>
+    <string name="point.kong.visible.wind">Open kong of wind</string>
+    <string name="point.kong.hidden.wind">Hidden kong of wind</string>
+    <string name="point.kong.wind.player">Kong of player wind</string>
+    <string name="point.kong.wind.round">Kong of round wind</string>
+    <string name="point.kong.wind.game">Kong of game wind</string>
+    <string name="point.kong.visible.dragon">Open kong of wind</string>
+    <string name="point.kong.hidden.dragon">Hidden kong of wind</string>
+    <string name="point.kong.dragon">Open kong of wind</string>
+    <string name="point.kong.visible.terminal">Open kong of terminal</string>
+    <string name="point.kong.hidden.terminal">Hidden kong of terminal</string>
+    <string name="point.kong.visible.common">Open kong</string>
+    <string name="point.kong.hidden.common">Hidden kong</string>
+    <string name="point.all.flowers">All flowers bonus</string>
+    <string name="point.player.flower">Player flower</string>
+    <string name="point.all.seasons">All seasons bonus</string>
+    <string name="point.player.season">Player season</string>
+    <string name="point.mahjong">Points for mahjong</string>
+    <string name="point.only.chow">Only Chows and one pair</string>
+    <string name="point.from.wall">Winning tile from the wall</string>
+    <string name="point.prunier">Winning tile 5 dot, from the wall</string>
+    <string name="point.only.pong">Only pongs and kongs and one pair</string>
+    <string name="point.calling.hand">Called hand</string>
+    <string name="point.pure.hand">Pure hand</string>
+    <string name="point.steal.kong">Winning tile from a kong</string>
+    <string name="point.hill">Winning tile from discarded tiles</string>
+    <string name="point.hidden">All tiles hidden</string>
+    <string name="point.terminal">Only tiles 1, 9 and honnors</string>
+    <string name="point.last.tile">Winning tile is the last, from the walls</string>
+    <string name="point.suffix">pts</string>
+    <string name="bonus.prefix">x</string>
+    <string name="result.title">Result</string>
+    <string name="result.subtitle">Details of your hand points</string>
+    <string name="result.point">Points:</string>
+    <string name="result.bonus">Bonuses:</string>
+    <string name="result.total">Total:</string>
+    
     <string name="action.go">"Let's go!"</string>
     <string name="action.delete">Delete</string>
     <string name="action.deleteall">Delete all</string>
@@ -93,8 +157,10 @@
     <string name="option.exit">Exit</string>
     <string name="error.invalid.tiles">Error: Unable to find a valid game. Please check your tiles.</string>
     <string name="error.tile.quantity">Error: You should have between 13 and 18 tiles.</string>
-    <string name="point.pair.wind.player">Pair of player wind</string>
-    <string name="point.pair.wind.round">Pair of round wind</string>
-    <string name="point.pair.wind.game">Pair of game wind</string>
-    <string name="point.pair.dragon">Pair of dragon</string>
+    <string name="error.select.playerwind">Error: Select your current wind position</string>
+    <string name="error.select.gamewind">Error: Select the current game wind</string>
+    <string name="error.select.roundwind">Error: Select the current round wind</string>
+    <string name="error.select.lasttile">Error: Select your winning tile</string>
+    <string name="title_activity_result">ResultActivity</string>
+
 </resources>

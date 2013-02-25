@@ -190,10 +190,11 @@ public class Tile implements Comparable<Tile>, Parcelable, Serializable {
 
 	public enum Category implements Parcelable {
 
-		BAMBOO("b"), CHARACTER("k"), CIRCLE("c"), WIND("w"), DRAGON("d"), FLOWER(
-				"f"), SEASON("s");
+		BAMBOO("b",false), CHARACTER("k",false), CIRCLE("c",false), WIND("w",true), DRAGON("d",true), FLOWER(
+				"f",true), SEASON("s",true);
 
 		private String value;
+		private boolean isHonor;
 
 		public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
 
@@ -207,10 +208,15 @@ public class Tile implements Comparable<Tile>, Parcelable, Serializable {
 
 		};
 
-		Category(String v) {
+		Category(String v,boolean h) {
 			value = v;
+			isHonor = h;
 		}
 
+		public boolean isHonor(){
+			return isHonor;
+		}
+		
 		@Override
 		public String toString() {
 			return value;

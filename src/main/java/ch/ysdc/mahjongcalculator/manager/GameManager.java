@@ -35,7 +35,7 @@ public class GameManager {
 	public static LinkedList<Tile> createTiles(
 			HashMap<String, Integer> playerTiles, boolean isVisible) {
 		Log.d(TAG, "createTiles");
-		
+
 		LinkedList<Tile> tiles = new LinkedList<Tile>();
 		Pattern pattern = Pattern.compile(TILE_IMG_REGEX);
 
@@ -64,83 +64,23 @@ public class GameManager {
 
 		return tiles;
 	}
-	// public static Game initializeGame(Game game) {
-	//
-	// Log.d(TAG, "Enter initialize");
-	//
-	// // 36xtile of bamboo
-	// for (int i = 1; i <= 9; i++) {
-	// for (int j = 0; j < 4; j++) {
-	// Tile tile = new Tile(i, "tile_" + i + "b", Tile.Category.BAMBOO);
-	// tile.setGame(game);
-	// DatabaseManager.getInstance().addTile(tile);
-	// DatabaseManager.getInstance().updateGame(game);
-	// }
-	// }
-	//
-	// // 36xtile of circle
-	// for (int i = 1; i <= 9; i++) {
-	// for (int j = 0; j < 4; j++) {
-	// Tile tile = new Tile(i, "tile_" + i + "c", Tile.Category.CIRCLE);
-	// tile.setGame(game);
-	// DatabaseManager.getInstance().addTile(tile);
-	// DatabaseManager.getInstance().updateGame(game);
-	// }
-	// }
-	//
-	// // 36xtile of character
-	// for (int i = 1; i <= 9; i++) {
-	// for (int j = 0; j < 4; j++) {
-	// Tile tile = new Tile(i, "tile_" + i + "k",
-	// Tile.Category.CHARACTER);
-	// tile.setGame(game);
-	// DatabaseManager.getInstance().addTile(tile);
-	// DatabaseManager.getInstance().updateGame(game);
-	// }
-	// }
-	//
-	// // 16xtile of wind
-	// for (String suffix : WINDS) {
-	// for (int j = 0; j < 4; j++) {
-	// Tile tile = new Tile(0, "tile_" + suffix, Tile.Category.WIND);
-	// tile.setGame(game);
-	// DatabaseManager.getInstance().addTile(tile);
-	// DatabaseManager.getInstance().updateGame(game);
-	// }
-	// }
-	//
-	// // 12xtile of dragon
-	// for (String suffix : DRAGONS) {
-	// for (int j = 0; j < 4; j++) {
-	// Tile tile = new Tile(0, "tile_" + suffix, Tile.Category.DRAGON);
-	// tile.setGame(game);
-	// DatabaseManager.getInstance().addTile(tile);
-	// DatabaseManager.getInstance().updateGame(game);
-	// }
-	// }
-	//
-	// // 4xtile of flower
-	// for (String suffix : FLOWERS) {
-	// Tile tile = new Tile(0, "tile_" + suffix, Tile.Category.FLOWER);
-	// tile.setGame(game);
-	// DatabaseManager.getInstance().addTile(tile);
-	// DatabaseManager.getInstance().updateGame(game);
-	// }
-	//
-	// // 4xtile of season
-	// for (String suffix : SEASONS) {
-	// Tile tile = new Tile(0, "tile_" + suffix, Tile.Category.SEASON);
-	// tile.setGame(game);
-	// DatabaseManager.getInstance().addTile(tile);
-	// DatabaseManager.getInstance().updateGame(game);
-	// }
-	// //Create the hand of the game
-	// game.setHand(new Hand());
-	// DatabaseManager.getInstance().createHand(game.getHand());
-	// DatabaseManager.getInstance().updateGame(game);
-	//
-	// Log.d(TAG, "Leave database initialization");
-	// return game;
-	// }
 
+	public static Tile createTile(String img) {
+		Pattern pattern = Pattern.compile(TILE_IMG_REGEX);
+		Tile tile = null;
+		Matcher matcher = pattern.matcher(img);
+
+		if (matcher.matches()) {
+			// Exception if we can't parse correctly the tile image name
+			if (matcher.groupCount() != 3) {
+				throw new RuntimeException("Wrong image name " + img);
+			}
+
+			// Create the tile and set the properties
+			tile = new Tile(Integer.valueOf(matcher.group(2)), img,
+					Tile.Category.fromValue(matcher.group(3)));
+		}
+		
+		return tile;
+	}
 }
