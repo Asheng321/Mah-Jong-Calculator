@@ -86,7 +86,7 @@ public class ChineseResultManager extends ResultManager {
 		this.hand.setBonuses(new LinkedList<Point>());
 
 		for (Combination combination : hand.getCombinations()) {
-
+			Log.d(TAG, "Combo: " + combination.getType() + " ");
 			switch (combination.getType()) {
 			case PAIR:
 				if (++pairQuantity > 1) {
@@ -160,6 +160,7 @@ public class ChineseResultManager extends ResultManager {
 		Tile t = combination.getTiles().get(0);
 		switch (t.getCategory()) {
 		case WIND:
+			checkIfHidden(t);
 			// Calculate combo points
 			if (t.getIsVisible()) {
 				hand.getPoints().add(
@@ -183,7 +184,7 @@ public class ChineseResultManager extends ResultManager {
 						new Point(context
 								.getString(R.string.point_kong_wind_round),
 								ROUND_COMBO_WIND, combination,true));
-			} else if ((t.getNo() == gameWind) && (!!t.getIsVisible())) {
+			} else if (t.getNo() == gameWind) {
 				hand.getBonuses().add(
 						new Point(context
 								.getString(R.string.point_kong_wind_game),
@@ -191,6 +192,7 @@ public class ChineseResultManager extends ResultManager {
 			}
 			break;
 		case DRAGON:
+			checkIfHidden(t);
 			// Calculate combo points
 			if (t.getIsVisible()) {
 				hand.getPoints().add(
@@ -261,6 +263,7 @@ public class ChineseResultManager extends ResultManager {
 		Tile t = combination.getTiles().get(0);
 		switch (t.getCategory()) {
 		case WIND:
+			checkIfHidden(t);
 			// Calculate combo points
 			if (t.getIsVisible()) {
 				hand.getPoints().add(
@@ -284,7 +287,7 @@ public class ChineseResultManager extends ResultManager {
 						new Point(context
 								.getString(R.string.point_pong_wind_round),
 								ROUND_COMBO_WIND, combination,true));
-			} else if ((t.getNo() == gameWind) && (!!t.getIsVisible())) {
+			} else if (t.getNo() == gameWind) {
 				hand.getBonuses().add(
 						new Point(context
 								.getString(R.string.point_pong_wind_game),
@@ -292,6 +295,7 @@ public class ChineseResultManager extends ResultManager {
 			}
 			break;
 		case DRAGON:
+			checkIfHidden(t);
 			// Calculate combo points
 			if (t.getIsVisible()) {
 				hand.getPoints().add(
@@ -453,6 +457,7 @@ public class ChineseResultManager extends ResultManager {
 		Tile t = combination.getTiles().get(0);
 		switch (t.getCategory()) {
 		case WIND:
+			checkIfHidden(t);
 			if (t.getNo() == hand.getPlayerWind()) {
 				hand.getPoints().add(
 						new Point(context
@@ -471,6 +476,7 @@ public class ChineseResultManager extends ResultManager {
 			}
 			break;
 		case DRAGON:
+			checkIfHidden(t);
 			if (!!t.getIsVisible()) {
 				hand.getPoints().add(
 						new Point(

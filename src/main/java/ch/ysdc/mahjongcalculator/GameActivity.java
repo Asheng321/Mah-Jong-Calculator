@@ -19,16 +19,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import ch.ysdc.mahjongcalculator.ResultActivity.InnerComparator;
 import ch.ysdc.mahjongcalculator.factory.ResultManagerFactory;
 import ch.ysdc.mahjongcalculator.manager.FileManager;
 import ch.ysdc.mahjongcalculator.manager.GameManager;
 import ch.ysdc.mahjongcalculator.manager.ResultManager;
 import ch.ysdc.mahjongcalculator.model.Combination;
 import ch.ysdc.mahjongcalculator.model.Hand;
-import ch.ysdc.mahjongcalculator.model.Point;
 import ch.ysdc.mahjongcalculator.model.Possibility;
 import ch.ysdc.mahjongcalculator.model.Tile;
+import ch.ysdc.mahjongcalculator.model.Validity;
 import ch.ysdc.mahjongcalculator.utils.AndroidUtils;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -92,6 +91,7 @@ public class GameActivity extends SherlockActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
+		// Set the home button as visible
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Log.i(TAG, "onCreate");
 		mContext = this;
@@ -107,6 +107,11 @@ public class GameActivity extends SherlockActivity implements
 				seasons = new LinkedList<Integer>();
 				gameWind = new LinkedList<Integer>();
 				roundWind = new LinkedList<Integer>();
+
+				// Set the visibility of the winner layout
+				LinearLayout layout = (LinearLayout) findViewById(R.id.game_winner_layout);
+				layout.setVisibility(hand.getValidity() == Validity.MAHJONG ? View.VISIBLE
+						: View.INVISIBLE);
 			}
 			getIntent().removeExtra(MainActivity.POSSIBILITY);
 		}
@@ -141,8 +146,10 @@ public class GameActivity extends SherlockActivity implements
 			roundWind = fm.readIntegerList(ROUNDWIND);
 			flowers = fm.readIntegerList(FLOW);
 			seasons = fm.readIntegerList(SEAS);
+
 		}
 		Log.d(TAG, "nb combo: " + hand.getCombinations().size());
+		loadGameParameters();
 		initializeView();
 	}
 
@@ -155,6 +162,7 @@ public class GameActivity extends SherlockActivity implements
 		Log.d(TAG, "onStop");
 
 		Log.d(TAG, "nb combo: " + hand.getCombinations().size());
+		saveGameParameters();
 		FileManager fm = new FileManager(getFilesDir());
 		fm.saveHand(hand, MainActivity.POSSIBILITY);
 		fm.saveIntegerList(playerWind, WIND);
@@ -163,6 +171,68 @@ public class GameActivity extends SherlockActivity implements
 		fm.saveIntegerList(flowers, FLOW);
 		fm.saveIntegerList(seasons, SEAS);
 		resetView();
+	}
+
+	/****************************************************************************
+	 * saveGameParameters
+	 ****************************************************************************/
+	private void saveGameParameters() {
+
+		// Winning tile
+		ImageButton imgBtn = (ImageButton) findViewById(R.id.game_lasttile_tile);
+		if (((String) imgBtn.getTag()).length() != 0) {
+			hand.setWinningTile(GameManager.createTile((String) imgBtn.getTag()));
+		}
+		// from wall
+		CheckBox box = (CheckBox) findViewById(R.id.game_lasttile_box);
+		hand.setFromWall(box.isChecked());
+
+		RadioGroup group = (RadioGroup) findViewById(R.id.game_last_choice);
+
+		switch (group.getCheckedRadioButtonId()) {
+		case 0:
+			break;
+		case 1:
+			hand.setStealedKong(true);
+			break;
+		case 2:
+			hand.setLastTile(true);
+			break;
+		case 3:
+			hand.setFromHill(true);
+			break;
+		}
+
+	}
+	
+	/****************************************************************************
+	 * loadGameParameters
+	 ****************************************************************************/
+	private void loadGameParameters() {
+
+		// Winning tile
+		if(hand.getWinningTile() != null){
+			ImageButton btn = (ImageButton) findViewById(R.id.game_lasttile_tile);
+			btn.setImageResource(getResources().getIdentifier(
+					(String) hand.getWinningTile().getImg(), "drawable", this.getPackageName()));
+			btn.setTag((String) hand.getWinningTile().getImg());
+		}
+		// from wall
+		CheckBox box = (CheckBox) findViewById(R.id.game_lasttile_box);
+		box.setSelected(hand.fromWall());
+
+		//Last tile
+		RadioGroup group = (RadioGroup) findViewById(R.id.game_last_choice);
+		
+		if(hand.stealedKong()){
+			group.check(R.id.game_last_kong);
+		}else if(hand.lastTile()){
+			group.check(R.id.game_last_title);
+		}else if(hand.fromHill()){
+			group.check(R.id.game_last_detached);
+		}else{
+			group.check(R.id.game_last_normal);
+		}
 	}
 
 	/****************************************************************************
@@ -390,6 +460,11 @@ public class GameActivity extends SherlockActivity implements
 			ImageButton btn = (ImageButton) findViewById(i);
 			btn.setBackgroundColor(Color.YELLOW);
 		}
+
+		// Set the visibility of the winner layout
+		LinearLayout layout = (LinearLayout) findViewById(R.id.game_winner_layout);
+		layout.setVisibility(hand.getValidity() == Validity.MAHJONG ? View.VISIBLE
+				: View.INVISIBLE);
 	}
 
 	/****************************************************************************
@@ -432,106 +507,135 @@ public class GameActivity extends SherlockActivity implements
 		seasons = null;
 	}
 
-	private void calculateResult()
-	{
+	private void calculateResult() {
 		int gameWindNb = 0;
 		int roundWindNb = 0;
 
-		//player wind test
-		if(playerWind.size()!=1){
-			Toast.makeText(this, getString(R.string.error_select_playerwind), Toast.LENGTH_LONG).show();
+		// player wind test
+		if (playerWind.size() != 1) {
+			Toast.makeText(this, getString(R.string.error_select_playerwind),
+					Toast.LENGTH_LONG).show();
 			return;
 		}
 		ImageButton imgBtn = (ImageButton) findViewById(playerWind.get(0));
-		hand.setPlayerWind(Integer.valueOf((String)imgBtn.getTag()));
+		hand.setPlayerWind(Integer.valueOf((String) imgBtn.getTag()));
 
-		//game wind test
-		if(gameWind.size()!=1){
-			Toast.makeText(this, getString(R.string.error_select_gamewind), Toast.LENGTH_LONG).show();
+		// game wind test
+		if (gameWind.size() != 1) {
+			Toast.makeText(this, getString(R.string.error_select_gamewind),
+					Toast.LENGTH_LONG).show();
 			return;
 		}
 		imgBtn = (ImageButton) findViewById(gameWind.get(0));
-		gameWindNb = Integer.valueOf((String)imgBtn.getTag());
+		gameWindNb = Integer.valueOf((String) imgBtn.getTag());
 
-		//round wind test
-		if(roundWind.size()!=1){
-			Toast.makeText(this, getString(R.string.error_select_roundwind), Toast.LENGTH_LONG).show();
+		// round wind test
+		if (roundWind.size() != 1) {
+			Toast.makeText(this, getString(R.string.error_select_roundwind),
+					Toast.LENGTH_LONG).show();
 			return;
 		}
 		imgBtn = (ImageButton) findViewById(roundWind.get(0));
-		roundWindNb = Integer.valueOf((String)imgBtn.getTag());
-		
-		//Winning tile
-		imgBtn = (ImageButton) findViewById(R.id.game_lasttile_tile);
-		if(((String)imgBtn.getTag()).length()==0){
-			Toast.makeText(this, getString(R.string.error_select_lasttile), Toast.LENGTH_LONG).show();
-			return;
-		}
-		hand.setWinningTile(GameManager.createTile((String)imgBtn.getTag()));
-		
-		//flowers
-		for(Integer id : flowers){
+		roundWindNb = Integer.valueOf((String) imgBtn.getTag());
+
+		// flowers
+		hand.getFlowers().clear();
+		for (Integer id : flowers) {
 			imgBtn = (ImageButton) findViewById(id);
-			Tile t = GameManager.createTile((String)imgBtn.getTag());
+			Tile t = GameManager.createTile((String) imgBtn.getTag());
 			hand.addFlower(t);
 		}
-		
-		//season
-		for(Integer id : seasons){
+
+		// season
+		hand.getSeasons().clear();
+		for (Integer id : seasons) {
 			imgBtn = (ImageButton) findViewById(id);
-			Tile t = GameManager.createTile((String)imgBtn.getTag());
+			Tile t = GameManager.createTile((String) imgBtn.getTag());
 			hand.addSeasons(t);
 		}
 
-		//from wall
-		CheckBox box = (CheckBox) findViewById(R.id.game_lasttile_box);
-		hand.setFromWall(box.isChecked());
+		// If winner hand
+		if (hand.getValidity() == Validity.MAHJONG) {
 
-		RadioGroup group = (RadioGroup) findViewById(R.id.game_last_choice);
-		
-		switch(group.getCheckedRadioButtonId()){
-		case 0:
-			break;
-		case 1:
-			hand.setStealedKong(true);
-			break;
-		case 2:
-			hand.setLastTile(true);
-			break;
-		case 3:
-			hand.setFromHill(true);
-			break;
+			// Winning tile
+			imgBtn = (ImageButton) findViewById(R.id.game_lasttile_tile);
+			if (((String) imgBtn.getTag()).length() == 0) {
+				Toast.makeText(this, getString(R.string.error_select_lasttile),
+						Toast.LENGTH_LONG).show();
+				return;
+			}
+			hand.setWinningTile(GameManager.createTile((String) imgBtn.getTag()));
+
+			// from wall
+			hand.setFromWall(false);
+			CheckBox box = (CheckBox) findViewById(R.id.game_lasttile_box);
+			hand.setFromWall(box.isChecked());
+
+			RadioGroup group = (RadioGroup) findViewById(R.id.game_last_choice);
+
+			hand.setStealedKong(false);
+			hand.setLastTile(false);
+			hand.setFromHill(false);
+			
+			switch (group.getCheckedRadioButtonId()) {
+			case 0:
+				break;
+			case 1:
+				if(box.isChecked()){
+					Toast.makeText(this, getString(R.string.error_select_kong),
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				hand.setStealedKong(true);
+				break;
+			case 2:
+				if(!box.isChecked()){
+					Toast.makeText(this, getString(R.string.error_select_last),
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				hand.setLastTile(true);
+				break;
+			case 3:
+				if(!box.isChecked()){
+					Toast.makeText(this, getString(R.string.error_select_hill),
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				hand.setFromHill(true);
+				break;
+			}
 		}
-		
 		// Initialize the progress window
 		mProgressDialog = ProgressDialog.show(this,
 				getString(R.string.game_result_title),
 				getString(R.string.game_result_msg), true);
 
-		resultManager = ResultManagerFactory.getSelectedResultManager(this, hand, roundWindNb, gameWindNb);
+		resultManager = ResultManagerFactory.getSelectedResultManager(this,
+				hand, roundWindNb, gameWindNb);
 		// Create the thread that will initialize our DB
 		new Thread((new Runnable() {
 			@Override
 			public void run() {
 
 				hand = resultManager.CalculateResult();
-				
-				Message msg = mHandler.obtainMessage(MSG_EMPTY_END,null);
+
+				Message msg = mHandler.obtainMessage(MSG_EMPTY_END, null);
 				mHandler.sendMessage(msg);
-				
+
 				Log.d(TAG, "nb points: " + hand.getPoints().size());
 				Log.d(TAG, "nb bonus: " + hand.getBonuses().size());
-				
+
 				Log.d(TAG, "nb points: " + hand.getTotalPoints());
 				Log.d(TAG, "nb bonus: " + hand.getTotalBonuses());
 
-				//open result page
+				// open result page
 				Intent intent = new Intent(ACTION_RESULT);
-				intent.putExtra(HAND, (Parcelable)hand);
+				intent.putExtra(HAND, (Parcelable) hand);
 				startActivity(intent);
 			}
 		})).start();
-		
+
 	}
 
 	/****************************************************************************

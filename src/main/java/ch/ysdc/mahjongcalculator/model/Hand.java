@@ -123,10 +123,11 @@ public class Hand implements Parcelable, Serializable {
 	public Hand(Possibility possibility) {
 		validity = possibility.getValidity();
 		combinations = possibility.getCombinations();
-		if (possibility.getPair() != null) {
+
+		if ((possibility.getPair() != null) && (possibility.getPair().getTiles().size() > 0)) {
 			combinations.add(possibility.getPair());
 		}
-		if (possibility.getUnusedTileCombination() != null) {
+		if ((possibility.getUnusedTileCombination() != null) && (possibility.getUnusedTileCombination().getTiles().size() > 0)) {
 			combinations.add(possibility.getUnusedTileCombination());
 		}
 		points = new LinkedList<Point>();
@@ -226,6 +227,26 @@ public class Hand implements Parcelable, Serializable {
 
 	public void setSeasons(List<Tile> seasons) {
 		this.seasons = seasons;
+	}
+
+	public Tile getWinningTile() {
+		return winningTile;
+	}
+
+	public boolean isFromWall() {
+		return fromWall;
+	}
+
+	public boolean isFromHill() {
+		return fromHill;
+	}
+
+	public boolean isStealedKong() {
+		return stealedKong;
+	}
+
+	public boolean isLastTile() {
+		return isLastTile;
 	}
 
 	public void setWinningTile(Tile winningTile) {
@@ -330,6 +351,9 @@ public class Hand implements Parcelable, Serializable {
 	}
 
 	public boolean prunier() {
+		if(winningTile == null){
+			return false;
+		}
 		return (fromWall || fromHill) && (winningTile.getNo() == 5)
 				&& (winningTile.getCategory() == Category.CIRCLE);
 	}

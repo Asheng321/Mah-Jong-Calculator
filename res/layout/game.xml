@@ -1,466 +1,469 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background"  >
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+    <!-- USERS TILES -->
+
+    <TextView
+        android:id="@+id/game.subtitles"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:padding="10dp"
+        android:text="@string/game.subtitles" />
+    <!-- OPEN TILES -->
 
-        <!-- USERS TILES -->
-
-        <TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/game.player.tiles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/game.player.tiles"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        <!-- OPEN TILES -->
-
-        <HorizontalScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/game.player.open.tiles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="40dp"
-                android:orientation="horizontal"
-                android:padding="4dp" >
-            </LinearLayout>
-        </HorizontalScrollView>
-
-        <!-- HAND TILES -->
-
-        <HorizontalScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/game.player.hidden.tiles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="40dp"
-                android:orientation="horizontal"
-                android:padding="4dp" >
-            </LinearLayout>
-        </HorizontalScrollView>
-
-        <!-- WIND OF THE PLAYER -->
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/game.wind.layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/game.wind.title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/game.wind.title"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageButton
-                android:id="@+id/game.tile.honor.ew"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.ew"
-                android:onClick="windSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_1w"
-                android:tag="1" />
-
-            <ImageButton
-                android:id="@+id/game.tile.honor.sw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.sw"
-                android:onClick="windSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_2w"
-                android:tag="2" />
-
-            <ImageButton
-                android:id="@+id/game.tile.honor.ww"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.ww"
-                android:onClick="windSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_3w"
-                android:tag="3" />
-
-            <ImageButton
-                android:id="@+id/game.tile.honor.nw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@string/tile.honor.nw"
-                android:onClick="windSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_4w"
-                android:tag="4" />
-        </LinearLayout>
-
-        <!-- WIND OF THE game -->
-
-        <LinearLayout
-            android:id="@+id/game.wind.game.layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/game.wind.game.title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/game.wind.game.title"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageButton
-                android:id="@+id/game.wind.game.ew"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="gameWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_1w"
-                android:tag="1" />
-
-            <ImageButton
-                android:id="@+id/game.wind.game.sw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="gameWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_2w"
-                android:tag="2" />
-
-            <ImageButton
-                android:id="@+id/game.wind.game.ww"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="gameWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_3w"
-                android:tag="3" />
-
-            <ImageButton
-                android:id="@+id/game.wind.game.nw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="gameWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_4w"
-                android:tag="4" />
-        </LinearLayout>
-        <!-- WIND OF THE round -->
-
-        <LinearLayout
-            android:id="@+id/game.wind.round.layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/game.wind.round.title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/game.wind.round.title"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageButton
-                android:id="@+id/game.wind.round.ew"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="roundWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_1w"
-                android:tag="1" />
-
-            <ImageButton
-                android:id="@+id/game.wind.round.sw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="roundWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_2w"
-                android:tag="2" />
-
-            <ImageButton
-                android:id="@+id/game.wind.round.ww"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="roundWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_3w"
-                android:tag="3" />
-
-            <ImageButton
-                android:id="@+id/game.wind.round.nw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="roundWindSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_4w"
-                android:tag="4" />
-        </LinearLayout>
-
-        <!-- FLOWER OF THE PLAYER -->
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/game.flower.layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/game.flower.title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/game.flower.title"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageButton
-                android:id="@+id/game.tile.flower.1f"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="flowerSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_1f"
-                android:tag="tile_1f" />
-
-            <ImageButton
-                android:id="@+id/game.tile.flower.2f"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="flowerSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_2f"
-                android:tag="tile_2f" />
-
-            <ImageButton
-                android:id="@+id/game.tile.flower.3f"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="flowerSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_3f"
-                android:tag="tile_3f" />
-
-            <ImageButton
-                android:id="@+id/game.tile.flower.4f"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="flowerSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_4f"
-                android:tag="tile_4f" />
-        </LinearLayout>
-
-        <!-- season OF THE PLAYER -->
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/game.season.layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/game.season.title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/game.season.title"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageButton
-                android:id="@+id/game.tile.season.1s"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="seasonSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_1s"
-                android:tag="tile_1s" />
-
-            <ImageButton
-                android:id="@+id/game.tile.season.2s"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="seasonSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_2s"
-                android:tag="tile_2s" />
-
-            <ImageButton
-                android:id="@+id/game.tile.season.3s"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="seasonSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_3s"
-                android:tag="tile_3s" />
-
-            <ImageButton
-                android:id="@+id/game.tile.season.4s"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:onClick="seasonSelected"
-                android:padding="6dp"
-                android:src="@drawable/tile_4s"
-                android:tag="tile_4s" />
-        </LinearLayout>
-
-        <TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/game.mahjong.points"
+            android:id="@+id/game.player.open.tiles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/game.mahjong.points"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        <!-- LAST TILES SELECTED -->
+            android:minHeight="40dp"
+            android:orientation="horizontal"
+            android:padding="4dp" >
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- HAND TILES -->
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/game.lasttile.layout"
-            android:layout_width="fill_parent"
+            android:id="@+id/game.player.hidden.tiles"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/game.lasttile.title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/game.lasttile.title"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageButton
-                android:id="@+id/game.lasttile.tile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:paddingRight="6dp"
-                android:src="@drawable/undefined"
-                android:tag="" />
+            android:minHeight="40dp"
+            android:orientation="horizontal"
+            android:padding="4dp" >
         </LinearLayout>
+    </HorizontalScrollView>
 
-        <CheckBox
-            android:id="@+id/game.lasttile.box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/game.lasttile.wall"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
-        <!-- Last Tile type -->
-
-        <TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/game.last.title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/game.last.title"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <RadioGroup
-            android:id="@+id/game.last.choice"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <RadioButton
-                android:id="@+id/game.last.normal"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="@string/game.last.normal" />
+            <!-- WIND OF THE PLAYER -->
 
-            <RadioButton
-                android:id="@+id/game.last.kong"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/game.last.kong" />
+            <LinearLayout
+                android:id="@+id/game.wind.layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
-            <RadioButton
-                android:id="@+id/game.last.wall"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/game.last.wall" />
+                <TextView
+                    android:id="@+id/game.wind.title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/game.wind.title"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <RadioButton
-                android:id="@+id/game.last.detached"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/game.last.detached" />
-        </RadioGroup>
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/game.tile.honor.ew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.ew"
+                    android:onClick="windSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_1w"
+                    android:tag="1" />
 
-</ScrollView>
+                <ImageButton
+                    android:id="@+id/game.tile.honor.sw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.sw"
+                    android:onClick="windSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_2w"
+                    android:tag="2" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.honor.ww"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.ww"
+                    android:onClick="windSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_3w"
+                    android:tag="3" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.honor.nw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/tile.honor.nw"
+                    android:onClick="windSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_4w"
+                    android:tag="4" />
+            </LinearLayout>
+            <!-- FLOWER OF THE PLAYER -->
+
+            <LinearLayout
+                android:id="@+id/game.flower.layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/game.flower.title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/game.flower.title"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.flower.1f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="flowerSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_1f"
+                    android:tag="tile_1f" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.flower.2f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="flowerSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_2f"
+                    android:tag="tile_2f" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.flower.3f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="flowerSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_3f"
+                    android:tag="tile_3f" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.flower.4f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="flowerSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_4f"
+                    android:tag="tile_4f" />
+            </LinearLayout>
+
+            <!-- season OF THE PLAYER -->
+
+            <LinearLayout
+                android:id="@+id/game.season.layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/game.season.title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/game.season.title"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.season.1s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="seasonSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_1s"
+                    android:tag="tile_1s" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.season.2s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="seasonSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_2s"
+                    android:tag="tile_2s" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.season.3s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="seasonSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_3s"
+                    android:tag="tile_3s" />
+
+                <ImageButton
+                    android:id="@+id/game.tile.season.4s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="seasonSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_4s"
+                    android:tag="tile_4s" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/game.parameters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/game.parameters"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <!-- WIND OF THE game -->
+
+            <LinearLayout
+                android:id="@+id/game.wind.game.layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/game.wind.game.title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/game.wind.game.title"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.game.ew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="gameWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_1w"
+                    android:tag="1" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.game.sw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="gameWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_2w"
+                    android:tag="2" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.game.ww"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="gameWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_3w"
+                    android:tag="3" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.game.nw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="gameWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_4w"
+                    android:tag="4" />
+            </LinearLayout>
+            <!-- WIND OF THE round -->
+
+            <LinearLayout
+                android:id="@+id/game.wind.round.layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/game.wind.round.title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/game.wind.round.title"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.round.ew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="roundWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_1w"
+                    android:tag="1" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.round.sw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="roundWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_2w"
+                    android:tag="2" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.round.ww"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="roundWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_3w"
+                    android:tag="3" />
+
+                <ImageButton
+                    android:id="@+id/game.wind.round.nw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="roundWindSelected"
+                    android:padding="6dp"
+                    android:src="@drawable/tile_4w"
+                    android:tag="4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/game.winner.layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/game.mahjong.points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/game.mahjong.points"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <!-- LAST TILES SELECTED -->
+
+                <LinearLayout
+                    android:id="@+id/game.lasttile.layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/game.lasttile.title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:text="@string/game.lasttile.title"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <ImageButton
+                        android:id="@+id/game.lasttile.tile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:contentDescription="@null"
+                        android:paddingRight="6dp"
+                        android:src="@drawable/undefined"
+                        android:tag="" />
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/game.lasttile.box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/game.lasttile.wall"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <!-- Last Tile type -->
+
+                <TextView
+                    android:id="@+id/game.last.title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/game.last.title"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioGroup
+                    android:id="@+id/game.last.choice"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <RadioButton
+                        android:id="@+id/game.last.normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/game.last.normal" />
+
+                    <RadioButton
+                        android:id="@+id/game.last.kong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:text="@string/game.last.kong" />
+
+                    <RadioButton
+                        android:id="@+id/game.last.wall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:text="@string/game.last.wall" />
+
+                    <RadioButton
+                        android:id="@+id/game.last.detached"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:text="@string/game.last.detached" />
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

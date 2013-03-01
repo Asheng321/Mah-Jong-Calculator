@@ -97,7 +97,7 @@ public class MainActivity extends SherlockActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//getSupportActionBar().setSubtitle("Hello world. What is the maximum space i have for my subtitle?");
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		//getSupportActionBar().setDisplayShowHomeEnabled(false);
 		// Initialization
 		setContentView(R.layout.main);
 		// Save the context, for the future handler

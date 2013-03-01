@@ -50,7 +50,7 @@
     <string name="tile.honor.rd">Red Dragon</string>
     <string name="tile.honor.gd">Green Dragon</string>
     <string name="tile.honor.wd">White Dragon</string>
-    <string name="main.title">Tiles Selection</string>
+    <string name="main.title">Select your tiles</string>
     <string name="main.playertiles"></string>
     <string name="main.player.subtitle">Select the tiles to add to your hidden game or open combination.</string>
     <string name="main.player.tile.empty">Select the tiles to add</string>
@@ -67,7 +67,9 @@
     <string name="main.next.single">Single possibility found.Define your game settings</string>
     <string name="main.next.multi">Multiple possibility founds. Select one to continue.</string>
     <string name="settings.title">Settings</string>
-    <string name="game.title">Game Parameters</string>
+    <string name="game.title">Your Combinations</string>
+    <string name="game.subtitles">Fill the end game parameters</string>
+    <string name="game.parameters">Game Parameters</string>
     <string name="game.lasttile.title">Winning tile</string>
     <string name="game.lasttile.wall">Winning tile taken from wall</string>
     <string name="game.wind.title">Player wind</string>
@@ -78,7 +80,6 @@
     <string name="game.last.detached">Tile from detached wall</string>
     <string name="game.flower.title">Player flowers</string>
     <string name="game.season.title">Player Seasons</string>
-    <string name="game.player.tiles">Player Combinations</string>
     <string name="game.mahjong.points">Winner specific points</string>
     <string name="game.wind.game.title">Game wind</string>
     <string name="game.wind.round.title">Round wind</string>
@@ -161,6 +162,7 @@
     <string name="error.select.gamewind">Error: Select the current game wind</string>
     <string name="error.select.roundwind">Error: Select the current round wind</string>
     <string name="error.select.lasttile">Error: Select your winning tile</string>
-    <string name="title_activity_result">ResultActivity</string>
-
+    <string name="error.select.kong">Error: You cannot "steal from kong"" and have your "winning tile from wall"</string>
+    <string name="error.select.last">Error: If you took the "last tile from wall", you should check the box "winning tile from wall"?</string>
+    <string name="error.select.hill">Error: You should check the box "winning tile from wall"</string>
 </resources>

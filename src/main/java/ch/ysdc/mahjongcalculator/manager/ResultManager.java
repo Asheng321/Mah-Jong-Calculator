@@ -1,12 +1,15 @@
 package ch.ysdc.mahjongcalculator.manager;
 
 import android.content.Context;
+import android.util.Log;
 import ch.ysdc.mahjongcalculator.model.Hand;
 import ch.ysdc.mahjongcalculator.model.Tile;
 import ch.ysdc.mahjongcalculator.model.Tile.Category;
 
 public abstract class ResultManager {
 
+	private static String TAG = "ResultManager";
+	
 	protected Hand hand;
 	protected int roundWind;
 	protected int gameWind;
@@ -67,8 +70,11 @@ public abstract class ResultManager {
 	 ****************************************************************************/
 	protected void checkIfPure(Tile t) {
 		if (isPure) {
+			Log.d(TAG, "isPure(" + isPure + ")");
+			Log.d(TAG, "currentCategory: " + currentCategory + "       challenger: " + t.getCategory());
 			if ((currentCategory == null) && (!t.getCategory().isHonor())) {
 				currentCategory = t.getCategory();
+				Log.d(TAG, "new category: " + currentCategory);
 			} else if ((currentCategory != t.getCategory())
 					&& (!t.getCategory().isHonor())) {
 				isPure = false;

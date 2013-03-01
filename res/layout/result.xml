@@ -7,13 +7,6 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/result.title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:text="@string/result.subtitle" />
 
     <LinearLayout
